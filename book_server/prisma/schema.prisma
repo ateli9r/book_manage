@@ -1,0 +1,1043 @@
+generator client {
+  provider = "dart run orm"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ALL_CODE_TBL {
+  CODE_TYPE String   @db.VarChar(4)
+  CODE_NAME String?  @db.VarChar(15)
+  UNIT_TYPE String   @db.VarChar(5)
+  UNIT_NAME String?  @db.VarChar(30)
+  SORT      Int?
+  USE_YN    String?  @default("Y") @db.Char(1)
+  DEL_YN    String?  @default("N") @db.Char(1)
+  REG_DATE  DateTime @default(now()) @db.Timestamp(0)
+  UPD_DATE  DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+
+  @@id([CODE_TYPE, UNIT_TYPE])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model APPROVAL_ATTACHFILE_TBL {
+  APPROVAL_ID  String   @db.VarChar(255)
+  SEQ          Decimal  @db.Decimal(2, 0)
+  ORI_FILE_NM  String?  @db.VarChar(256)
+  SAVE_FILE_NM String?  @db.VarChar(512)
+  FILE_SIZE    Int?
+  REG_DATE     DateTime @default(now()) @db.Timestamp(0)
+
+  @@id([APPROVAL_ID, SEQ])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model APPROVAL_DOC_INFO_TBL {
+  SEQ                       BigInt    @id @default(autoincrement())
+  DOC_TYPE                  String?   @db.VarChar(3)
+  DOC_NM                    String?   @db.VarChar(100)
+  TITLE                     String    @db.VarChar(120)
+  APPROVAL_LINE_TYPE        String?   @db.VarChar(3)
+  APPROVAL_LINE_CONTENT     String?   @db.LongText
+  APPROVAL_LINE_CONTENT_BAK String?   @db.LongText
+  CONTENT                   String?   @db.LongText
+  WRITER_ID                 String?   @db.VarChar(15)
+  USER_NM                   String?   @db.VarChar(30)
+  REG_DATE                  DateTime  @default(now()) @db.Timestamp(0)
+  UPD_DATE                  DateTime? @db.Timestamp(0)
+  USE_YN                    String?   @default("Y") @db.Char(1)
+  DEL_YN                    String?   @default("N") @db.Char(1)
+
+  @@index([WRITER_ID], map: "APPROVAL_DOC_INFO_TBL_ibfk_1")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model APPROVAL_HISTORY_TBL {
+  SEQ         BigInt    @id @default(autoincrement())
+  APPROVAL_ID String    @db.VarChar(255)
+  WRITER_ID   String    @db.VarChar(15)
+  WRITER_NM   String    @db.VarChar(128)
+  DOC_TYPE    String    @db.VarChar(3)
+  KEEP_PRIOD  Int       @default(1)
+  KEEP_DATE   DateTime  @default(now()) @db.Timestamp(0)
+  GRADE       String    @default("B") @db.Char(1)
+  STATUS      String?   @db.VarChar(3)
+  CONTENT     String?   @db.LongText
+  REG_DATE    DateTime  @default(now()) @db.Timestamp(0)
+  UPD_DATE    DateTime? @db.Timestamp(0)
+  DEL_YN      String?   @default("N") @db.Char(1)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model APPROVAL_MASTER_TBL {
+  APPROVAL_ID   String    @id @db.VarChar(255)
+  WRITER_ID     String    @db.VarChar(15)
+  WRITER_NM     String    @db.VarChar(128)
+  DOC_TYPE      String    @db.VarChar(3)
+  KEEP_PRIOD    Int       @default(1)
+  KEEP_DATE     DateTime  @default(now()) @db.Timestamp(0)
+  GRADE         String    @default("B") @db.Char(1)
+  STATUS        String?   @db.VarChar(3)
+  TITLE         String?   @db.VarChar(1024)
+  HEADER        String?   @db.LongText
+  CONTENT       String?   @db.LongText
+  M1            Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M2            Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M3            Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M4            Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M5            Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M6            Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M7            Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M8            Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M9            Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M10           Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M11           Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M12           Decimal?  @default(0.0) @db.Decimal(3, 1)
+  REG_DATE      DateTime  @default(now()) @db.Timestamp(0)
+  COMPLETE_DATE DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  UPD_DATE      DateTime? @db.Timestamp(0)
+  DEL_YN        String?   @default("N") @db.Char(1)
+
+  @@index([WRITER_ID], map: "APPROVAL_MASTER_TBL_ibfk_1")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model APPROVAL_MEMO_TBL {
+  SEQ         BigInt    @id @default(autoincrement())
+  APPROVAL_ID String    @db.VarChar(255)
+  WRITER_ID   String    @db.VarChar(15)
+  WRITER_NM   String    @db.VarChar(128)
+  CONTENT     String?   @db.Text
+  REG_DATE    DateTime  @default(now()) @db.Timestamp(0)
+  UPD_DATE    DateTime? @db.Timestamp(0)
+  DEL_YN      String?   @default("N") @db.Char(1)
+
+  @@index([WRITER_ID], map: "APPROVAL_MEMO_TBL_ibfk_1")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model APPROVAL_TYPE_TBL {
+  TYPE        String  @id @db.VarChar(3)
+  CONTENT     String? @db.LongText
+  CONTENT_BAK String? @db.LongText
+  USE_YN      String? @default("Y") @db.Char(1)
+  DEL_YN      String? @default("N") @db.Char(1)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model APPROVAL_USER_TBL {
+  APPROVAL_ID           String    @db.VarChar(255)
+  APPROVAL_USR_ID       String    @db.VarChar(15)
+  APPROVAL_USR_GRADE_CD String?   @db.VarChar(4)
+  APPROVAL_USR_TYPE     String    @default("A") @db.Char(1)
+  APPROVAL_USR_SORT     Int
+  APPROVAL_PROC_USER_YN String?   @default("N") @db.Char(1)
+  APPROVAL_PROC_YN      String    @default("N") @db.Char(1)
+  APPROVAL_PROC_DATE    DateTime  @default(now()) @db.Timestamp(0)
+  REG_DATE              DateTime  @default(now()) @db.Timestamp(0)
+  UPD_DATE              DateTime? @db.Timestamp(0)
+  DEL_YN                String?   @default("N") @db.Char(1)
+
+  @@id([APPROVAL_ID, APPROVAL_USR_ID, APPROVAL_USR_TYPE])
+  @@index([APPROVAL_USR_ID], map: "APPROVAL_USER_TBL_ibfk_2")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model BOOK_ASSET_TBL {
+  SEQ       BigInt    @id @default(autoincrement())
+  ASSET_NO  String    @db.VarChar(50)
+  BOOK_NM   String?   @db.VarChar(500)
+  CNT       Int?
+  PUBLISHER String?   @db.VarChar(50)
+  AMOUNT    Int?
+  BUY_DATE  String?   @db.VarChar(8)
+  MNG_DEPT  String?   @db.VarChar(50)
+  RENT_YN   String?   @db.Char(1)
+  RENT_USER String?   @db.VarChar(50)
+  REMARKS   String?   @db.VarChar(4000)
+  USE_YN    String    @default("Y") @db.Char(1)
+  DEL_YN    String    @default("N") @db.Char(1)
+  REG_DATE  DateTime  @default(now()) @db.Timestamp(0)
+  UPD_DATE  DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model CAR_ASSET_INSUR_TBL {
+  SEQ       BigInt @id @default(autoincrement())
+  MSEQ      BigInt
+  GUARANTEE String @db.VarChar(500)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model CAR_ASSET_TBL {
+  SEQ        BigInt    @id @default(autoincrement())
+  ASSET_NO   String    @db.VarChar(50)
+  MODEL_NO   String?   @db.VarChar(50)
+  CAR_NO     String?   @db.VarChar(50)
+  OWNER      String?   @db.VarChar(50)
+  OWNER_TYPE String?   @default("1") @db.Char(1)
+  AMOUNT     Int?
+  BUY_DATE   String?   @db.VarChar(8)
+  SELLER     String?   @db.VarChar(50)
+  REMARKS    String?   @db.VarChar(4000)
+  MNGR_NM    String?   @db.VarChar(50)
+  FUEL       String?   @db.VarChar(1)
+  MANU_DT    String?   @db.VarChar(4)
+  EFFIC      String?   @db.VarChar(5)
+  INSUR      String?   @db.VarChar(50)
+  INSUR_MNGR String?   @db.VarChar(50)
+  EMG_TEL    String?   @db.VarChar(15)
+  STORE_NM   String?   @db.VarChar(50)
+  STORE_TEL  String?   @db.VarChar(50)
+  USE_YN     String    @default("Y") @db.Char(1)
+  DEL_YN     String    @default("N") @db.Char(1)
+  REG_DATE   DateTime  @default(now()) @db.Timestamp(0)
+  UPD_DATE   DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model CAR_CHARGE_TBL {
+  SEQ       BigInt @id @default(autoincrement())
+  ITEM      String @db.VarChar(8)
+  CHARGE    BigInt
+  WRITER_ID String @db.VarChar(8)
+  MEMO      String @db.VarChar(8)
+  REG_DATE  String @db.VarChar(8)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model CAR_INFO_TBL {
+  SORT          BigInt @id @default(autoincrement())
+  CAR_MANAGE_NO String @db.VarChar(15)
+  MODEL         String @db.VarChar(21)
+  USER_ID       String @db.VarChar(15)
+  REG_DATE      String @db.VarChar(8)
+  DISUSED_YN    String @default("N") @db.VarChar(8)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model CAR_MILEAGE_TBL {
+  SEQ           BigInt @id @default(autoincrement())
+  CAR_MANAGE_NO String @db.VarChar(15)
+  FOR_USE       String @map("FOR USE") @db.VarChar(21)
+  ST_POINT      String @db.VarChar(15)
+  DESTINATION   String @db.VarChar(15)
+  MILEAGE       BigInt
+  TOTAL_MILEAGE BigInt
+  RECORD_DATE   String @db.VarChar(8)
+  WRITER_ID     String @db.VarChar(8)
+  EDITOR_ID     String @db.VarChar(8)
+  REG_DATE      String @db.VarChar(8)
+  APPR_YN       String @db.VarChar(8)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model CAR_PART_REPLACE_TBL {
+  SEQ               BigInt @id @default(autoincrement())
+  PART_NM           String @db.VarChar(8)
+  REPLACE_PERIOD    BigInt
+  RE_TOTAL_MILEAGE  BigInt
+  NOW_TOTAL_MILEAGE BigInt
+  REMAIN_MILEAGE    BigInt
+  REPLACE_COUNT     BigInt
+  PART_RE_DATE      String @db.VarChar(8)
+  WRITER_ID         String @db.VarChar(8)
+  REG_DATE          String @db.VarChar(8)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model CAR_REPAIR_LOG {
+  SEQ             BigInt  @id @default(autoincrement())
+  MSEQ            BigInt?
+  ASSET_NO        String? @db.VarChar(50)
+  REPAIR_DE       String? @db.VarChar(8)
+  REPAIR_AMOUNT   String? @db.VarChar(10)
+  REPAIR_STORE    String? @db.VarChar(50)
+  REPAIR_LOG      String? @db.VarChar(2000)
+  REPAIR_OWNER    String? @db.VarChar(50)
+  FILE_TP         String? @db.VarChar(1)
+  FLPTH           String? @db.VarChar(200)
+  ORGINAL_FILE_NM String? @db.VarChar(200)
+  STRE_FILE_NM    String? @db.VarChar(200)
+  REG_ID          String? @db.VarChar(25)
+  REG_DATE        String? @db.VarChar(25)
+  EDIT_ID         String? @db.VarChar(25)
+  EDIT_DATE       String? @db.VarChar(25)
+  DEL_ID          String? @db.VarChar(25)
+  DEL_DATE        String? @db.VarChar(25)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model CAR_USE_MANAGE_TBL {
+  SEQ                 BigInt   @id @default(autoincrement())
+  CAR_NO              String   @db.VarChar(25)
+  CAR_TYPE            String   @db.VarChar(50)
+  DESTINATION         String   @db.VarChar(255)
+  PURPOSE             String?  @db.VarChar(512)
+  USERS               String   @db.VarChar(255)
+  USE_START_DATE      DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  USE_END_DATE        DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  USE_BEFORE_DISTANCE Decimal? @db.Decimal(10, 0)
+  USE_AFTER_DISTANCE  Decimal? @db.Decimal(10, 0)
+  REMARKS             String?  @db.VarChar(4000)
+  ACCEPT_YN           String?  @default("S") @db.Char(1)
+  REG_USER            String?  @db.VarChar(15)
+  REG_DATE            DateTime @default(now()) @db.Timestamp(0)
+  USE_START_HOUR      String?  @default("0") @db.VarChar(6)
+  USE_END_HOUR        String?  @default("0") @db.VarChar(6)
+  CARD_APPLY          String   @default("N") @db.Char(1)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model HOLIDAY_TBL {
+  USER_ID  String    @db.VarChar(15)
+  STD_YEAR String    @db.VarChar(4)
+  M1       Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M2       Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M3       Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M4       Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M5       Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M6       Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M7       Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M8       Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M9       Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M10      Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M11      Decimal?  @default(0.0) @db.Decimal(3, 1)
+  M12      Decimal?  @default(0.0) @db.Decimal(3, 1)
+  USE_YN   String    @default("Y") @db.Char(1)
+  DEL_YN   String    @default("N") @db.Char(1)
+  REG_DATE DateTime  @default(now()) @db.Timestamp(0)
+  UPD_DATE DateTime? @db.Timestamp(0)
+
+  @@id([USER_ID, STD_YEAR])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model MEMBER_TBL {
+  USER_ID         String     @id @db.VarChar(15)
+  PASSWD          String     @db.VarChar(512)
+  USER_NM         String     @db.VarChar(128)
+  DEPT            String?    @db.VarChar(128)
+  GRADE           String?    @db.VarChar(4)
+  JOIN_DATE       DateTime   @default(now()) @db.Timestamp(0)
+  RETIRE_DATE     DateTime   @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  PWD_CHG_DATE    DateTime   @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  PWD_WRONG_CNT   Int?
+  USE_YN          String?    @default("Y") @db.Char(1)
+  DEL_YN          String?    @default("N") @db.Char(1)
+  REG_DATE        DateTime   @default(now()) @db.Timestamp(0)
+  UPD_DATE        DateTime?  @db.Timestamp(0)
+  LAST_LOGIN_DATE DateTime   @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  MEMO            String?    @db.VarChar(4000)
+  MENU_TBL        MENU_TBL[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model MENU_AUTH_TBL {
+  USER_ID  String    @db.VarChar(15)
+  MENU_ID  String    @db.VarChar(7)
+  READ_YN  String?   @default("Y") @db.Char(1)
+  WRITE_YN String?   @default("Y") @db.Char(1)
+  REG_ID   String?   @default("ADMIN") @db.VarChar(15)
+  UPD_ID   String?   @default("ADMIN") @db.VarChar(15)
+  REG_DATE DateTime  @default(now()) @db.Timestamp(0)
+  UPD_DATE DateTime? @db.Timestamp(0)
+
+  @@id([USER_ID, MENU_ID])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model MENU_TBL {
+  MENU_ID    String      @id @db.VarChar(7)
+  MENU_NM    String      @db.VarChar(255)
+  DEPTH      Int
+  SORT       Int
+  OWNER_ID   String?     @db.VarChar(7)
+  URL        String?     @db.Text
+  WRITER_ID  String?     @db.VarChar(15)
+  REG_DATE   DateTime    @default(now()) @db.Timestamp(0)
+  UPD_DATE   DateTime?   @db.Timestamp(0)
+  USE_YN     String?     @default("Y") @db.Char(1)
+  DEL_YN     String?     @default("N") @db.Char(1)
+  DISP_YN    String?     @default("Y") @db.Char(1)
+  MENU_ICON  String?     @db.VarChar(100)
+  MEMBER_TBL MEMBER_TBL? @relation(fields: [WRITER_ID], references: [USER_ID], onDelete: Cascade, onUpdate: Restrict, map: "MENU_TBL_MEMBER_TBL_USER_ID_fk")
+
+  @@index([WRITER_ID], map: "WRITER_ID")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model OFFICE_ASSET_TBL {
+  SEQ           BigInt    @id @default(autoincrement())
+  ASSET_NO      String    @db.VarChar(50)
+  ASSET_TYPE    String    @db.VarChar(50)
+  SELLER        String?   @db.VarChar(50)
+  BUY_DATE      String?   @db.VarChar(8)
+  MODEL_NO      String?   @db.VarChar(50)
+  SERIAL_NO     String?   @db.VarChar(100)
+  AMOUNT        Int?
+  KEEP_YEAR     Decimal?  @db.Decimal(10, 0)
+  MNG_DEPT      String?   @db.VarChar(50)
+  ASSET_ACCOUNT String?   @db.VarChar(25)
+  REMARKS       String?   @db.VarChar(4000)
+  CARRY_OUT     String?   @db.VarChar(4000)
+  USE_YN        String    @default("Y") @db.Char(1)
+  DEL_YN        String    @default("N") @db.Char(1)
+  REG_DATE      DateTime  @default(now()) @db.Timestamp(0)
+  UPD_DATE      DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model SERVER_ASSET_TBL {
+  SEQ        BigInt    @id @default(autoincrement())
+  ASSET_NO   String    @db.VarChar(50)
+  ASSET_TYPE String    @db.VarChar(50)
+  MAKER      String?   @db.VarChar(50)
+  CNT        Decimal?  @db.Decimal(5, 0)
+  AMOUNT     Int?
+  BUY_DATE   String?   @db.VarChar(8)
+  SELLER     String?   @db.VarChar(50)
+  MODEL_NO   String?   @db.VarChar(50)
+  SERIAL_NO  String?   @db.VarChar(100)
+  HOSTNAME   String?   @db.VarChar(100)
+  BUILT_LOC  String?   @db.Char(1)
+  USE_DESC   String?   @db.VarChar(1000)
+  OS_INFO    String?   @db.VarChar(100)
+  CPU_INFO   String?   @db.VarChar(100)
+  RAM_INFO   String?   @db.VarChar(100)
+  HDD_INFO   String?   @db.VarChar(100)
+  SSD_INFO   String?   @db.VarChar(100)
+  ODD        String?   @db.VarChar(100)
+  REMARKS    String?   @db.VarChar(4000)
+  CARRY_OUT  String?   @db.VarChar(4000)
+  USE_YN     String    @default("Y") @db.Char(1)
+  DEL_YN     String    @default("N") @db.Char(1)
+  REG_DATE   DateTime  @default(now()) @db.Timestamp(0)
+  UPD_DATE   DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model SOFTWARE_ASSET_TBL {
+  SEQ         BigInt    @id @default(autoincrement())
+  ASSET_NO    String    @db.VarChar(50)
+  SOFTWARE_NM String    @db.VarChar(100)
+  VERSION_NM  String?   @db.VarChar(100)
+  CNT         Decimal?  @db.Decimal(5, 0)
+  AMOUNT      Int?
+  BUY_DATE    String?   @db.VarChar(8)
+  SERIAL_NO   String?   @db.VarChar(100)
+  LICENSE_NO  String?   @db.VarChar(100)
+  USER_NM     String?   @db.VarChar(128)
+  REMARKS     String?   @db.VarChar(4000)
+  USE_YN      String    @default("Y") @db.Char(1)
+  DEL_YN      String    @default("N") @db.Char(1)
+  REG_DATE    DateTime  @default(now()) @db.Timestamp(0)
+  UPD_DATE    DateTime? @db.Timestamp(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_ADMIN_MENU {
+  MENU_CD   String  @id @db.VarChar(9)
+  MENU_NM   String  @db.VarChar(100)
+  MENU_PATH String? @db.VarChar(250)
+  MENU_SRT  Int
+  MENU_DEPS Int
+  MENU_ICON String? @db.VarChar(100)
+  MENU_TP   String  @default("F") @db.VarChar(1)
+  REG_ID    String  @db.VarChar(100)
+  REG_DATE  String? @db.VarChar(14)
+  EDIT_ID   String? @db.VarChar(100)
+  EDIT_DATE String? @db.VarChar(14)
+  DEL_ID    String? @db.VarChar(100)
+  DEL_DATE  String? @db.VarChar(14)
+
+  @@index([MENU_CD], map: "IDX_ADMIN_MENU")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_ALARM {
+  SEQ          Int     @id
+  MSG_CD       String? @db.VarChar(9)
+  MSG_CNTS     String? @db.VarChar(4000)
+  SEND_DATE    String? @db.VarChar(14)
+  SEND_DIV     String? @db.VarChar(1)
+  SEND_DEPT_CD String? @db.VarChar(12)
+  SEND_ID      String? @db.VarChar(25)
+  RECV_ID      String? @db.VarChar(25)
+  POP_YN       String? @default("N") @db.VarChar(1)
+  EDIT_ID      String? @db.VarChar(25)
+  EDIT_DATE    String? @db.VarChar(14)
+
+  @@index([SEQ, MSG_CD], map: "INDEX_ALARM")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_AUDIT_LOG {
+  SEQ       Int     @id
+  LOG_CODE  String  @db.VarChar(12)
+  LOG_CNTS  String  @db.Text
+  ERR_CODE  String? @db.VarChar(12)
+  REG_ID    String  @db.VarChar(25)
+  REG_DATE  String  @db.VarChar(14)
+  EDIT_ID   String? @db.VarChar(25)
+  EDIT_DATE String? @db.VarChar(14)
+  DEL_ID    String? @db.VarChar(25)
+  DEL_DATE  String? @db.VarChar(14)
+
+  @@index([SEQ, LOG_CODE, ERR_CODE], map: "INDEX_AUDIT_LOG")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_BANNER {
+  BANNER_CD String  @id @db.VarChar(9)
+  LK_URL    String? @db.VarChar(255)
+  LK_TARGET String? @db.VarChar(1)
+  FLPTH     String? @db.VarChar(200)
+  FILE_NM   String? @db.VarChar(200)
+  USE_YN    String? @default("N") @db.VarChar(1)
+  REG_ID    String  @db.VarChar(25)
+  REG_DATE  String? @db.VarChar(14)
+  EDIT_ID   String? @db.VarChar(25)
+  EDIT_DATE String? @db.VarChar(14)
+  DEL_ID    String? @db.VarChar(25)
+  DEL_DATE  String? @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_BOARD_COLUMN {
+  BOARD_CD String @db.VarChar(12)
+  SORT     Int
+  COL_CD   String @db.VarChar(100)
+  COL_NM   String @db.VarChar(50)
+  REG_ID   String @db.VarChar(25)
+  REG_DATE String @db.VarChar(14)
+
+  @@id([BOARD_CD, COL_CD])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_BOARD_COLUMN_DFT {
+  BOARD_TY  String  @db.VarChar(12)
+  SORT      Int
+  COL_CD    String  @db.VarChar(100)
+  COL_NM    String  @db.VarChar(50)
+  EDIT_ID   String? @db.VarChar(25)
+  EDIT_DATE String? @db.VarChar(14)
+  DEL_YN    String  @default("N") @db.VarChar(1)
+
+  @@id([BOARD_TY, COL_CD, DEL_YN])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_BOARD_COMMENT {
+  SEQ          Int
+  MSEQ         Int
+  BOARD_CD     String  @db.VarChar(12)
+  CNTS         String? @db.VarChar(1000)
+  UPPER_SEQ    Int?    @default(0)
+  REPLY_YN     String? @default("N") @db.VarChar(1)
+  REG_ADMIN_YN String? @default("N") @db.VarChar(1)
+  REG_ID       String  @db.VarChar(25)
+  REG_DATE     String  @db.VarChar(14)
+  EDIT_ID      String? @db.VarChar(25)
+  EDIT_DATE    String? @db.VarChar(14)
+  DEL_ID       String? @db.VarChar(25)
+  DEL_DATE     String? @db.VarChar(14)
+
+  @@id([SEQ, MSEQ, BOARD_CD])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_BOARD_FILE {
+  SEQ             Int
+  MSEQ            Int
+  BOARD_CD        String  @db.VarChar(12)
+  FILE_TP         String? @db.VarChar(1)
+  FLPTH           String? @db.VarChar(200)
+  ORGINAL_FILE_NM String? @db.VarChar(200)
+  STRE_FILE_NM    String? @db.VarChar(200)
+  FILE_SIZE       Int?
+  REPRE_YN        String? @default("N") @db.VarChar(1)
+  DWLD_CO         Int?
+
+  @@id([SEQ, MSEQ, BOARD_CD])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_BOARD_MST {
+  SEQ          Int
+  BOARD_CD     String  @db.VarChar(12)
+  CLS_CD       String? @db.VarChar(12)
+  TTL          String  @db.VarChar(100)
+  CNTS         String  @db.Text
+  FILE_YN      String? @default("N") @db.VarChar(1)
+  IMAGE_YN     String? @default("N") @db.VarChar(1)
+  NOTICE_YN    String? @default("N") @db.VarChar(1)
+  LK_URL       String? @db.VarChar(255)
+  LK_TARGET    String? @db.VarChar(1)
+  READ_CNT     Int?    @default(0)
+  REG_ADMIN_YN String? @default("N") @db.VarChar(1)
+  REPLY_YN     String? @default("N") @db.VarChar(1)
+  UPPER_SEQ    Int?    @default(0)
+  REG_ID       String  @db.VarChar(25)
+  REG_DATE     String  @db.VarChar(14)
+  EDIT_ID      String? @db.VarChar(25)
+  EDIT_DATE    String? @db.VarChar(14)
+  DEL_ID       String? @db.VarChar(25)
+  DEL_DATE     String? @db.VarChar(14)
+
+  @@id([SEQ, BOARD_CD])
+  @@index([SEQ, BOARD_CD], map: "INDEX_BOARD_MST")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_BOARD_STNG {
+  BOARD_CD    String  @id @db.VarChar(12)
+  BOARD_NM    String  @db.VarChar(100)
+  BOARD_TY    String  @default("D") @db.VarChar(12)
+  EDITOR_YN   String  @default("Y") @db.VarChar(1)
+  RLS_YN      String  @default("N") @db.VarChar(1)
+  CCL_SEQ     Int?
+  LIST_CNT    Int?
+  WRITE_YN    String? @db.VarChar(1)
+  COMMENT_YN  String? @db.VarChar(1)
+  REPLY_YN    String? @db.VarChar(1)
+  ATTACH_YN   String? @db.VarChar(1)
+  ATTACH_SIZE String? @db.VarChar(5)
+  ATTACH_CNT  String? @db.VarChar(5)
+  ATTACH_EXT  String? @db.VarChar(500)
+  REG_ID      String  @db.VarChar(25)
+  REG_DATE    String  @db.VarChar(14)
+  EDIT_ID     String? @db.VarChar(25)
+  EDIT_DATE   String? @db.VarChar(14)
+  DEL_ID      String? @db.VarChar(25)
+  DEL_DATE    String? @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_CCL {
+  SEQ             Int     @id
+  CCL_TYPE        String  @db.VarChar(50)
+  CCL_NM          String  @db.VarChar(50)
+  FLPTH           String? @db.VarChar(200)
+  ORGINAL_FILE_NM String? @db.VarChar(200)
+  STRE_FILE_NM    String? @db.VarChar(200)
+  FILE_EXTSN      String? @db.VarChar(10)
+  FILE_SIZE       Int?
+  REG_ID          String  @db.VarChar(25)
+  REG_DATE        String  @db.VarChar(14)
+  EDIT_ID         String? @db.VarChar(25)
+  EDIT_DATE       String? @db.VarChar(14)
+  DEL_ID          String? @db.VarChar(25)
+  DEL_DATE        String? @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_CODE_MST {
+  CD_GRP    String  @db.VarChar(12)
+  CD_KEY    String  @db.VarChar(12)
+  CD_VAL    String  @db.VarChar(50)
+  CD_DESC   String? @db.VarChar(300)
+  CD_SRT    Int
+  DEPTH     Int?
+  REG_ID    String  @db.VarChar(20)
+  REG_DATE  String? @db.VarChar(14)
+  EDIT_ID   String? @db.VarChar(20)
+  EDIT_DATE String? @db.VarChar(14)
+  DEL_ID    String? @db.VarChar(20)
+  DEL_DATE  String? @db.VarChar(14)
+
+  @@id([CD_GRP, CD_KEY])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_CONNECT_LOG {
+  SEQ          Int     @id
+  USER_ID      String  @db.VarChar(25)
+  CONN_TYPE    String? @db.VarChar(50)
+  OS_TYPE      String? @db.VarChar(50)
+  BROWSER_TYPE String? @db.VarChar(100)
+  CONNE_IP     String? @db.VarChar(20)
+  REG_DATE     String? @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_CONTENTS_FILE {
+  SEQ             Int     @id @default(autoincrement())
+  MSEQ            String  @db.VarChar(12)
+  FILE_TP         String? @db.VarChar(1)
+  FLPTH           String  @db.VarChar(200)
+  ORGINAL_FILE_NM String  @db.VarChar(200)
+  STRE_FILE_NM    String  @db.VarChar(200)
+  FILE_SIZE       Int
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_CONTENTS_MST {
+  SEQ       Int     @id
+  CNTS_NM   String  @db.VarChar(100)
+  PUB_DATE  String? @db.VarChar(14)
+  PUB_STATE String? @default("N") @db.VarChar(1)
+  CN        String? @db.LongText
+  SRCH_YN   String? @default("Y") @db.VarChar(1)
+  FILE_YN   String? @default("N") @db.VarChar(1)
+  IMAGE_YN  String? @default("N") @db.VarChar(1)
+  REG_ID    String  @db.VarChar(25)
+  REG_DATE  String? @db.VarChar(14)
+  EDIT_ID   String? @db.VarChar(25)
+  EDIT_DATE String? @db.VarChar(14)
+  DEL_ID    String? @db.VarChar(25)
+  DEL_DATE  String? @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_DEPT {
+  DEPT_CD       String  @id @db.VarChar(12)
+  DEPT_NM       String  @db.VarChar(50)
+  UPPER_DEPT_CD String? @db.VarChar(12)
+  UPPER_DEPT_NM String? @db.VarChar(50)
+  SORT          Int?
+  MAIN_YN       String? @db.VarChar(50)
+  DEPT_DESC     String? @db.VarChar(4000)
+  REG_ID        String  @db.VarChar(25)
+  REG_DATE      String  @db.VarChar(14)
+  EDIT_ID       String? @db.VarChar(25)
+  EDIT_DATE     String? @db.VarChar(14)
+  DEL_ID        String? @db.VarChar(25)
+  DEL_DATE      String? @db.VarChar(14)
+
+  @@index([DEPT_CD, UPPER_DEPT_CD], map: "IDX_DEPT")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_DEPT_EMP {
+  EMP_NO     String  @id @db.VarChar(12)
+  EMP_NM     String  @db.VarChar(100)
+  DEPT_CD    String? @db.VarChar(12)
+  DEPT_NM    String? @db.VarChar(50)
+  FCTN_CD    String? @db.VarChar(12)
+  FCTN_NM    String? @db.VarChar(50)
+  OFCP_CD    String? @db.VarChar(12)
+  OFCP_NM    String? @db.VarChar(50)
+  EMAIL_ADDR String? @db.VarChar(200)
+  OFFM_TELNO String? @db.VarChar(100)
+  HTEL_TELNO String? @db.VarChar(20)
+  DEPT_YN    String? @default("N") @db.VarChar(1)
+  REG_ID     String  @db.VarChar(25)
+  REG_DATE   String  @db.VarChar(14)
+  EDIT_ID    String? @db.VarChar(25)
+  EDIT_DATE  String? @db.VarChar(14)
+  DEL_ID     String? @db.VarChar(25)
+  DEL_DATE   String? @db.VarChar(14)
+
+  @@index([EMP_NO, EMP_NM, DEPT_CD, DEPT_NM], map: "IDX_DEPT_EMP")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_MENU {
+  MENU_CD       String  @id @db.VarChar(9)
+  MENU_NM       String  @db.VarChar(100)
+  MENU_PATH     String? @db.VarChar(250)
+  MENU_MAPPING  String? @db.VarChar(250)
+  MENU_SRT      Int
+  MENU_DEPS     Int
+  MENU_ICON     String? @db.VarChar(100)
+  MENU_TP       String  @default("F") @db.VarChar(1)
+  MAIN_EXPSR_YN String? @default("N") @db.VarChar(1)
+  SUB_EXPSR_YN  String? @default("N") @db.VarChar(1)
+  UPEND_CLAS    String? @db.VarChar(50)
+  UPEND_CN      String? @db.VarChar(900)
+  CCL_TYPE      String? @db.VarChar(50)
+  REG_ID        String  @db.VarChar(100)
+  REG_DATE      String? @db.VarChar(14)
+  EDIT_ID       String? @db.VarChar(100)
+  EDIT_DATE     String? @db.VarChar(14)
+  DEL_ID        String? @db.VarChar(100)
+  DEL_DATE      String? @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_MESSAGE_TMPLAT {
+  MSG_DIV_CD String  @db.VarChar(9)
+  MSG_CD     String  @db.VarChar(9)
+  MSG_NM     String? @db.VarChar(100)
+  MSG_TMPLAT String? @db.VarChar(4000)
+  USE_YN     String? @default("N") @db.VarChar(1)
+  EDIT_ID    String? @db.VarChar(25)
+  EDIT_DATE  String? @db.VarChar(14)
+
+  @@id([MSG_DIV_CD, MSG_CD])
+  @@index([MSG_DIV_CD, MSG_CD], map: "INDEX_MESSAGE_TMPLAT")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_MIME_TYPE {
+  SEQ     Int    @id @default(autoincrement())
+  EXTN_NM String @db.VarChar(50)
+  FILE_MT String @db.VarChar(100)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_MNGR_GRP {
+  GRP_CD    String  @id @db.VarChar(12)
+  GRP_NM    String? @db.VarChar(50)
+  GRP_DESC  String? @db.VarChar(100)
+  SORT      Int?
+  REG_ID    String  @db.VarChar(25)
+  REG_DATE  String  @db.VarChar(14)
+  EDIT_ID   String? @db.VarChar(25)
+  EDIT_DATE String? @db.VarChar(14)
+  DEL_ID    String? @db.VarChar(25)
+  DEL_DATE  String? @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_MNGR_MST {
+  MNGR_ID        String   @id @db.VarChar(25)
+  MNGR_NM        String   @db.VarChar(50)
+  MNGR_PW        String?  @db.VarChar(64)
+  GRP_CD         String?  @db.VarChar(12)
+  GRADE          String?  @db.VarChar(4)
+  PERM_CD        String   @db.VarChar(12)
+  ACS_YN         String?  @db.VarChar(1)
+  CLPH           String?  @db.VarChar(14)
+  EMP_NO         String?  @db.VarChar(12)
+  JOIN_DATE      String   @default("20230801000000") @db.VarChar(14)
+  RETIRE_DATE    DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  PWD_CHG_DATE   DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.Timestamp(0)
+  PWD_WRONG_CNT  Int?     @default(0)
+  PWD_WRONG_DATE String?  @db.VarChar(14)
+  LST_LOGIN_DATE String?  @db.VarChar(14)
+  FLPTH          String?  @db.VarChar(200)
+  FILE_NM        String?  @db.VarChar(200)
+  REG_ID         String   @db.VarChar(25)
+  REG_DATE       String   @db.VarChar(14)
+  EDIT_ID        String?  @db.VarChar(25)
+  EDIT_DATE      String?  @db.VarChar(14)
+  DEL_ID         String?  @db.VarChar(25)
+  DEL_DATE       String?  @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_MY_STNG {
+  USER_ID   String  @db.VarChar(25)
+  STNG_CD   String  @db.VarChar(12)
+  USER_DIV  String  @db.VarChar(1)
+  STNG_DATA String? @db.VarChar(500)
+
+  @@id([USER_ID, STNG_CD, USER_DIV])
+  @@index([USER_ID, STNG_CD, USER_DIV], map: "INDEX_MY_STNG")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_PERM_DTL {
+  PERM_CD   String  @db.VarChar(12)
+  MENU_CD   String  @db.VarChar(12)
+  READ_YN   String? @db.VarChar(1)
+  REG_YN    String? @db.VarChar(1)
+  MDFCN_YN  String? @db.VarChar(1)
+  DEL_YN    String? @db.VarChar(1)
+  MANAGE_YN String? @db.VarChar(1)
+  REG_ID    String  @db.VarChar(25)
+  REG_DATE  String  @db.VarChar(14)
+
+  @@id([PERM_CD, MENU_CD])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_PERM_MST {
+  PERM_CD   String  @id @db.VarChar(12)
+  PERM_NM   String  @db.VarChar(50)
+  SORT      String? @db.VarChar(1)
+  REG_ID    String  @db.VarChar(25)
+  REG_DATE  String  @db.VarChar(14)
+  EDIT_ID   String? @db.VarChar(25)
+  EDIT_DATE String? @db.VarChar(14)
+  DEL_ID    String? @db.VarChar(25)
+  DEL_DATE  String? @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_POPUP {
+  POP_CD    String  @id @db.VarChar(9)
+  POP_NM    String  @db.VarChar(200)
+  POP_TY    String  @db.VarChar(1)
+  IMG_TEXT  String? @db.VarChar(900)
+  LK_URL    String? @db.VarChar(255)
+  LK_TARGET String? @db.VarChar(1)
+  BGNG_DATE String  @db.VarChar(14)
+  END_DATE  String  @db.VarChar(14)
+  SPWG_PRED String? @db.VarChar(2)
+  FLPTH     String? @db.VarChar(200)
+  FILE_NM   String? @db.VarChar(200)
+  USE_YN    String? @default("N") @db.VarChar(1)
+  BEFORE_CD String? @db.VarChar(9)
+  REG_ID    String  @db.VarChar(25)
+  REG_DATE  String? @db.VarChar(14)
+  EDIT_ID   String? @db.VarChar(25)
+  EDIT_DATE String? @db.VarChar(14)
+  DEL_ID    String? @db.VarChar(25)
+  DEL_DATE  String? @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_STNG {
+  STNG_CD   String  @id @db.VarChar(12)
+  STNG_DATA String? @db.VarChar(500)
+  TITLE     String? @db.VarChar(200)
+  DESC_CN   String? @db.VarChar(300)
+  SORT      Int?
+  EDIT_ID   String? @db.VarChar(25)
+  EDIT_DATE String? @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model ST_USER_MST {
+  USER_ID        String  @id @db.VarChar(25)
+  USER_NM        String? @db.VarChar(50)
+  USER_PW        String  @db.VarChar(64)
+  USER_DIV       String? @db.VarChar(10)
+  STATUS         String? @db.VarChar(10)
+  PREV_LOGIN_YN  String? @db.VarChar(1)
+  WITHDRAWN_YN   String? @db.VarChar(1)
+  CLPH           String? @db.VarChar(14)
+  EMAIL          String? @db.VarChar(100)
+  LST_LOGIN_DATE String? @db.VarChar(14)
+  REG_ID         String  @db.VarChar(20)
+  REG_DATE       String? @db.VarChar(14)
+  EDIT_ID        String? @db.VarChar(20)
+  EDIT_DATE      String? @db.VarChar(14)
+  DEL_ID         String? @db.VarChar(20)
+  DEL_DATE       String? @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model WORK_REPORT_DETAIL_TBL {
+  REPORT_ID      String   @db.VarChar(10)
+  SEQ            BigInt   @default(autoincrement())
+  PROJECT_NM     String   @db.VarChar(255)
+  PROJECT_SUB_NM String   @db.VarChar(255)
+  DETAIL_CONTENT String?  @db.VarChar(512)
+  WORKER         String?  @db.VarChar(50)
+  GRADE          String?  @db.VarChar(4)
+  PROCESS_RATE   String?  @db.VarChar(3)
+  WORK_DATE      String?  @db.VarChar(30)
+  PROCESS_TYPE   String?  @db.Char(1)
+  SUBJECT_YN     String   @default("N") @db.Char(1)
+  REG_USER       String   @db.VarChar(15)
+  REG_DATE       DateTime @default(now()) @db.Timestamp(0)
+  COMPLETE_DATE  String?  @db.VarChar(10)
+
+  @@id([SEQ, REPORT_ID])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model WORK_REPORT_DETAIL_TBL_BACK {
+  REPORT_ID      String?   @db.VarChar(10)
+  SEQ            BigInt?
+  PROJECT_NM     String?   @db.VarChar(255)
+  PROJECT_SUB_NM String?   @db.VarChar(255)
+  DETAIL_CONTENT String?   @db.VarChar(512)
+  WORKER         String?   @db.VarChar(50)
+  GRADE          String?   @db.VarChar(4)
+  PROCESS_RATE   String?   @db.VarChar(3)
+  WORK_DATE      String?   @db.VarChar(30)
+  PROCESS_TYPE   String?   @db.Char(1)
+  SUBJECT_YN     String?   @db.Char(1)
+  REG_USER       String?   @db.VarChar(15)
+  REG_DATE       DateTime? @db.Timestamp(0)
+  COMPLETE_DATE  String?   @db.VarChar(10)
+
+  @@ignore
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model WORK_REPORT_HTML_TBL {
+  REPORT_ID    String   @db.VarChar(10)
+  USER_ID      String   @db.VarChar(15)
+  TITLE        String   @db.VarChar(255)
+  HTML_CONTENT String?  @db.LongText
+  REG_DATE     DateTime @default(now()) @db.Timestamp(0)
+  DEL_YN       String?  @default("N") @db.Char(1)
+
+  @@id([REPORT_ID, USER_ID])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model WORK_REPORT_HTML_TBL_BACK {
+  REPORT_ID    String   @db.VarChar(10)
+  USER_ID      String   @db.VarChar(15)
+  TITLE        String   @db.VarChar(255)
+  HTML_CONTENT String?  @db.LongText
+  REG_DATE     DateTime @default(now()) @db.Timestamp(0)
+  DEL_YN       String?  @default("N") @db.Char(1)
+
+  @@id([REPORT_ID, USER_ID])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model WORK_REPORT_MASTER_TBL {
+  REPORT_ID String    @id @db.VarChar(10)
+  TITLE     String    @db.VarChar(255)
+  DEPT      String    @db.VarChar(128)
+  REG_DATE  DateTime  @default(now()) @db.Timestamp(0)
+  UPD_DATE  DateTime? @db.Timestamp(0)
+  DEL_YN    String?   @default("N") @db.Char(1)
+
+  @@index([TITLE, REG_DATE, UPD_DATE], map: "IDX_WORK_REPORT_MASTER_TBL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model WORK_REPORT_MASTER_TBL_BACK {
+  REPORT_ID String?   @db.VarChar(10)
+  TITLE     String?   @db.VarChar(255)
+  DEPT      String?   @db.VarChar(128)
+  REG_DATE  DateTime? @db.Timestamp(0)
+  UPD_DATE  DateTime? @db.Timestamp(0)
+  DEL_YN    String?   @db.Char(1)
+
+  @@ignore
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model WORK_REQUEST_MST {
+  SEQ        Int     @id
+  RQSTR_DPNM String  @db.VarChar(30)
+  RQSTR_NM   String  @db.VarChar(25)
+  RQSTR_ID   String  @db.VarChar(25)
+  RQSTR_DATE String  @db.VarChar(14)
+  HOPE_DATE  String  @db.VarChar(14)
+  CHR_DPR_NM String  @db.VarChar(30)
+  CHR_NM     String  @db.VarChar(25)
+  CHR_ID     String  @db.VarChar(25)
+  CHR_CHK    String? @default("N") @db.VarChar(1)
+  TITLE      String  @db.VarChar(100)
+  CN         String  @db.Text
+  ETC        String? @db.Text
+  DOC        String? @db.Text
+  REG_ID     String  @db.VarChar(25)
+  REG_DATE   String  @db.VarChar(14)
+  EDIT_ID    String? @db.VarChar(25)
+  EDIT_DATE  String? @db.VarChar(14)
+  DEL_ID     String? @db.VarChar(25)
+  DEL_DATE   String? @db.VarChar(14)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model WORK_REQUEST_REF {
+  SEQ       Int     @id
+  MSEQ      Int
+  REF_ID    String  @db.VarChar(25)
+  REF_NM    String? @db.VarChar(25)
+  REF_DEP   String? @db.VarChar(25)
+  REF_GRADE String? @db.VarChar(25)
+  REG_ID    String  @db.VarChar(25)
+  REG_DATE  String  @db.VarChar(14)
+  EDIT_ID   String? @db.VarChar(25)
+  EDIT_DATE String? @db.VarChar(14)
+  DEL_ID    String? @db.VarChar(25)
+  DEL_DATE  String? @db.VarChar(14)
+}
