@@ -8,17 +8,12 @@ import '../../routes/rent.dart' as route;
 class _SearchMockRequestContext extends Mock implements RequestContext {
   _SearchMockRequestContext({required this.keyword});
 
-  final String method = 'POST';
-  final String schema = 'http';
-  final String host = 'localhost';
-  final int port = 8080;
-  final String path = '/rent';
   final String keyword;
 
   @override
   Request get request => Request(
-        method,
-        Uri(scheme: schema, host: host, port: port, path: path),
+        'POST',
+        Uri(scheme: 'http', host: 'localhost', port: 8080, path: '/rent'),
         headers: {
           'Content-Type': 'application/json',
         },
