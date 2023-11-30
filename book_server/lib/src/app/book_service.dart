@@ -24,6 +24,7 @@ class BookService {
       var book = Book(
         bookNm: item.bookNm!,
         assetNo: item.assetNo,
+        publisher: item.publisher ?? '',
       );
 
       ret.add(book);

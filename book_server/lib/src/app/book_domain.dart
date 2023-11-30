@@ -3,6 +3,7 @@ class Book {
   Book({
     required this.bookNm,
     required this.assetNo,
+    required this.publisher,
   });
 
   ///
@@ -10,4 +11,7 @@ class Book {
 
   ///
   String assetNo;
+
+  ///
+  String publisher;
 }

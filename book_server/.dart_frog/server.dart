@@ -11,6 +11,7 @@ import '../routes/search.dart' as search;
 import '../routes/rent.dart' as rent;
 import '../routes/login.dart' as login;
 import '../routes/index.dart' as index;
+import '../routes/util/print.dart' as util_print;
 
 
 void main() async {
@@ -20,14 +21,22 @@ void main() async {
 }
 
 Future<HttpServer> createServer(InternetAddress address, int port) {
-  final handler = Cascade().add(buildRootHandler()).handler;
+  final handler = Cascade().add(createStaticFileHandler()).add(buildRootHandler()).handler;
   return serve(handler, address, port);
 }
 
 Handler buildRootHandler() {
   final pipeline = const Pipeline();
   final router = Router()
+    ..mount('/util', (context) => buildUtilHandler()(context))
     ..mount('/', (context) => buildHandler()(context));
+  return pipeline.addHandler(router);
+}
+
+Handler buildUtilHandler() {
+  final pipeline = const Pipeline();
+  final router = Router()
+    ..all('/print', (context) => util_print.onRequest(context,));
   return pipeline.addHandler(router);
 }
 

@@ -40,7 +40,9 @@ class BookDatabase {
     if (prisma == null) initDatasource();
 
     final items = await prisma?.bookAssetTbl.findMany(
-      where: BOOKASSETTBLWhereInput(),
+      where: const BOOKASSETTBLWhereInput(
+        useYn: StringFilter(equals: 'Y'),
+      ),
     );
 
     return items?.toList();
