@@ -10,13 +10,16 @@
 
 import 'package:book_app/app/book.dart';
 import 'package:book_app/app/book_database.dart';
-import 'package:book_app/app/book_service.dart';
 import 'package:book_app/page/book_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'scan.dart';
 
 class BookListWidget extends StatefulWidget {
+  const BookListWidget({required this.httpClient, super.key});
+
+  final http.Client httpClient;
+
   @override
   State<BookListWidget> createState() => _BookListWidgetState();
 }
@@ -27,7 +30,7 @@ class _BookListWidgetState extends State<BookListWidget> {
   final _keywordController = TextEditingController();
 
   Future<List<Book>> getBookList() async {
-    final db = BookDatabase(client: http.Client());
+    final db = BookDatabase(client: widget.httpClient);
     final data = await db.search(_keyword);
     return data;
   }

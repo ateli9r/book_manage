@@ -3,21 +3,46 @@ import 'dart:io';
 
 import 'package:book_app/app/book_database.dart';
 import 'package:book_app/page/book_list.dart';
+import 'package:book_app/page/book_list_item.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
 
 // class MockClient extends Mock implements http.Client {}
-class MockClient extends Mock implements http.Client {
-  @override
-  Future<http.Response> get(Uri url, {Map<String, String>? headers}) async {
-    return http.Response('{"title": "blog_test"}', HttpStatus.ok);
-  }
 
+class BookListMockClient extends Mock implements http.Client {
   @override
   Future<http.Response> post(Uri url,
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
-    return http.Response('{"title": "blog_test"}', HttpStatus.ok);
+    final body = jsonEncode({
+      'isSuccess': true,
+      'data': [
+        {
+          'assetNo': '연구소-B-0150',
+          'bookNm': '이것이 데이터 분석이다 with 파이썬',
+          'publisher': '한빛미디어',
+        },
+        {
+          'assetNo': '연구소-B-0111',
+          'bookNm': '디지털 헬스케어 : 의료의 미래',
+          'publisher': '클라우드나인',
+        },
+        {
+          'assetNo': '연구소-B-0073',
+          'bookNm': 'TCP/IP 완벽가이드',
+          'publisher': '에이콘출판사',
+        },
+      ],
+    });
+
+    return http.Response(
+      body,
+      HttpStatus.ok,
+      headers: {
+        'content-type': 'application/json; charset=utf-8',
+      },
+    );
   }
 }
 
@@ -44,9 +69,27 @@ void main() {
   // });
 
   testWidgets('[도서조회] 데이터 갯수에 따라 아이템 위젯 매핑', (WidgetTester tester) async {
-    // await tester.pumpWidget(BookListWidget());
-    // expect(1, equals(0));
-    throw Exception('not impl');
+    final client = BookListMockClient();
+
+    final db = BookDatabase(client: client);
+    final data = await db.search('');
+    print(data);
+
+    await tester.pumpWidget(MaterialApp(
+      home: BookListWidget(httpClient: client),
+    ));
+
+    print('test#1');
+
+    final txt = find.text('CODE');
+    print(txt);
+
+    await tester.pumpAndSettle();
+
+    print('test#2');
+
+    final ttt = find.byElementType(BookListItem);
+    print(ttt);
   });
 
   testWidgets('[도서조회] 아이템 위젯을 탭 하면 상세화면으로 이동', (WidgetTester tester) async {

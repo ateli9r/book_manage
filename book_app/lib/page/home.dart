@@ -9,6 +9,7 @@
 
 import 'package:book_app/page/book_list.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class HomePageWidget extends StatelessWidget {
   @override
@@ -25,6 +26,6 @@ class HomePageWidget extends StatelessWidget {
     //     child: Text('#button'),
     //   ),
     // );
-    return BookListWidget();
+    return BookListWidget(httpClient: http.Client());
   }
 }
