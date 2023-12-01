@@ -36,12 +36,24 @@ class BookDatabase {
   }
 
   ///
-  Future<List<BookAssetTbl>?> search() async {
+  Future<List<BookAssetTbl>?> search(String keyword) async {
     if (prisma == null) initDatasource();
 
     final items = await prisma?.bookAssetTbl.findMany(
-      where: const BOOKASSETTBLWhereInput(
-        useYn: StringFilter(equals: 'Y'),
+      where: BOOKASSETTBLWhereInput(
+        useYn: const StringFilter(equals: 'Y'),
+        OR: [
+          BOOKASSETTBLWhereInput(
+            assetNo: StringFilter(
+              equals: keyword,
+            ),
+          ),
+          BOOKASSETTBLWhereInput(
+            bookNm: StringNullableFilter(
+              contains: keyword,
+            ),
+          ),
+        ],
       ),
     );
 

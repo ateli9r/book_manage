@@ -13,6 +13,7 @@ import 'package:book_app/app/book_database.dart';
 import 'package:book_app/app/book_service.dart';
 import 'package:book_app/page/book_list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'scan.dart';
 
 class BookListWidget extends StatefulWidget {
@@ -26,43 +27,8 @@ class _BookListWidgetState extends State<BookListWidget> {
   final _keywordController = TextEditingController();
 
   Future<List<Book>> getBookList() async {
-    // final data = await Future.delayed(const Duration(seconds: 1)).then((_) {
-    //   List<Book> ret = [
-    //     Book(
-    //       assetNo: '연구소-B-0222',
-    //       bookNm: '그림으로 공부하는 IT 인프라 구조',
-    //       publisher: '제이펍',
-    //     ),
-    //     Book(
-    //       assetNo: '연구소-B-0130',
-    //       bookNm: '배워서 바로 쓰는 스프링 프레임워크',
-    //       publisher: '한빛미디어',
-    //     ),
-    //     Book(
-    //       assetNo: '연구소-B-0164',
-    //       bookNm: '파이썬으로 다시 배우는 핵심 고등 수학',
-    //       publisher: '위키북스',
-    //     ),
-    //     Book(
-    //       assetNo: '연구소-B-0149',
-    //       bookNm: '오늘도 개발자가 안된다고 말했다',
-    //       publisher: '디지털북스',
-    //     ),
-    //     Book(
-    //       assetNo: '연구소-B-0175',
-    //       bookNm: '인생을 바꾼 식사의 기적',
-    //       publisher: '북테이블',
-    //     ),
-    //   ];
-
-    //   return ret;
-    // });
-
-    final db = BookDatabase();
-    db.search('');
-
-    final service = BookService();
-    final data = service.search('');
+    final db = BookDatabase(client: http.Client());
+    final data = await db.search(_keyword);
     return data;
   }
 
@@ -95,6 +61,9 @@ class _BookListWidgetState extends State<BookListWidget> {
                       child: Icon(Icons.search),
                     ),
                   ),
+                  onChanged: (_) {
+                    setScanCode(_keywordController.text);
+                  },
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -112,11 +81,11 @@ class _BookListWidgetState extends State<BookListWidget> {
                         label: const Text('QR스캔'),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          _keywordController.text = '';
+                          setScanCode('');
                         },
                         icon: const Icon(Icons.cleaning_services),
                         label: const Text('초기화'),

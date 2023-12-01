@@ -2,16 +2,24 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:book_server/src/app/book_service.dart';
 
 Future<Response> onRequest(RequestContext context) async {
-  final ret = {};
+  final ret = <String, dynamic>{};
   ret['isSuccess'] = false;
 
   final request = context.request;
 
   if (request.method.value == 'POST' &&
       request.headers['Content-Type']!.startsWith('application/json')) {
-    var service = BookService();
-    final items = await service.search('');
-    print('length: ${items.length}');
+    final body = await request.json();
+
+    var keyword = body['keyword'] as String?;
+    keyword ??= '';
+
+    final service = BookService();
+    final items = await service.search(keyword);
+    final data = items.map((item) => item.toJson()).toList();
+
+    ret['data'] = data;
+    ret['isSuccess'] = true;
   }
 
   return Response.json(body: ret);

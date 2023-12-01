@@ -16,7 +16,7 @@ class BookService {
   Future<List<Book>> search(String keyword) async {
     final ret = <Book>[];
     final database = BookDatabase();
-    final items = await database.search();
+    final items = await database.search(keyword);
 
     items?.forEach((item) {
       if (item.bookNm == null) return;
