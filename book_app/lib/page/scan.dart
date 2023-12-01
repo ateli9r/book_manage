@@ -16,15 +16,17 @@ class ScanPageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('QR스캔')),
+      appBar: AppBar(title: const Text('QR스캔')),
       body: QRCodeDartScanView(
+        typeScan: TypeScan.live,
+        resolutionPreset: QRCodeDartScanResolutionPreset.medium,
         scanInvertedQRCode: true,
-        typeScan: TypeScan.takePicture,
-        resolutionPreset: QRCodeDartScanResolutionPreset.ultraHigh,
+        controller: QRCodeDartScanController(),
         formats: const [
           BarcodeFormat.QR_CODE,
         ],
         onCapture: (Result result) {
+          print(result.text);
           setScanCode!(result.text);
           Navigator.of(context).pop();
         },
