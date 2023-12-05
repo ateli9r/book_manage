@@ -34,9 +34,7 @@ class BookDatabase {
             );
           }));
         }
-      } finally {
-        client.close();
-      }
+      } finally {}
 
       return ret;
     });
