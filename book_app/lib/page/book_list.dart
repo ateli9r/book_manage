@@ -10,6 +10,7 @@
 
 import 'package:book_app/app/book.dart';
 import 'package:book_app/app/book_database.dart';
+import 'package:book_app/page/book_detail.dart';
 import 'package:book_app/page/book_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -112,10 +113,20 @@ class _BookListWidgetState extends State<BookListWidget> {
                   child: ListView.builder(
                     itemCount: bookList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return BookListItem(
-                        bookNm: bookList[index].bookNm,
-                        assetNo: bookList[index].assetNo,
-                        publisher: bookList[index].publisher,
+                      return GestureDetector(
+                        child: BookListItem(
+                          bookNm: bookList[index].bookNm,
+                          assetNo: bookList[index].assetNo,
+                          publisher: bookList[index].publisher,
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BookDetailWidget(book: bookList[index]),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
