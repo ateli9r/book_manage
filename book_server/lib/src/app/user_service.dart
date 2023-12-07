@@ -13,12 +13,12 @@ class UserService {
   static final UserService _instance = UserService._privateConstructor();
 
   String encryptPassword(String userId, String password) {
-    final bUserId = utf8.encode(userId);
-    final bPasswd = Uint8List.fromList(utf8.encode(password));
+    final bufferId = utf8.encode(userId);
+    final bufferPw = utf8.encode(password);
 
-    final data = Uint8List(bUserId.length + bPasswd.length)
-      ..setAll(0, bUserId)
-      ..setAll(bUserId.length, bPasswd);
+    final data = Uint8List(bufferId.length + bufferPw.length)
+      ..setAll(0, bufferId)
+      ..setAll(bufferId.length, bufferPw);
 
     return base64.encode(sha256.convert(data).bytes);
   }
