@@ -7,9 +7,11 @@
 ///
 ///
 
+import 'package:book_app/app/book_service.dart';
 import 'package:book_app/app/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPageWidget extends StatefulWidget {
   LoginPageWidget({required this.setUserInfo, super.key});
@@ -68,7 +70,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 20.0),
+              padding: const EdgeInsets.only(top: 20.0),
               child: ElevatedButton(
                 onPressed: () async {
                   print('userId: $_userId / password: $_password');
@@ -97,19 +99,41 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     _isLoading = true;
                   });
 
-                  Future.delayed(const Duration(seconds: 2)).then((_) {
+                  final service = BookService(client: http.Client());
+                  final respData = await service.login(_userId, _password)
+                      as Map<String, dynamic>;
+
+                  setState(() {
+                    _isLoading = false;
+                  });
+
+                  if (respData['isSuccess'] == true) {
                     UserInfo data = UserInfo(
-                      userId: 'userId',
-                      UserNm: 'UserNm',
-                      deptCd: 'deptCd',
+                      userId: _userId,
+                      UserNm: '#UserNm',
+                      deptCd: '#deptCd',
                     );
 
-                    setState(() {
-                      _isLoading = false;
-                    });
-
                     widget.setUserInfo(data);
-                  });
+                  } else {
+                    print('error!');
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: const Text('error'),
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('ok'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
                 child: const Text('로그인'),
               ),

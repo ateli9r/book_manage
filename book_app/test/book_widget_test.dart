@@ -79,7 +79,7 @@ void main() {
       home: BookListWidget(httpClient: client),
     ));
 
-    final txt = find.text('CODE');
+    final txt = find.text('TCP/IP');
 
     await tester.pumpAndSettle();
 

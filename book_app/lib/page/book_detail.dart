@@ -15,7 +15,7 @@ import 'package:book_app/app/book.dart';
 import 'package:flutter/material.dart';
 
 class BookDetailWidget extends StatefulWidget {
-  BookDetailWidget({required this.book, super.key});
+  const BookDetailWidget({required this.book, super.key});
   final Book book;
 
   @override
