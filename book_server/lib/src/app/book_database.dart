@@ -35,8 +35,28 @@ class BookDatabase {
     isInit = true;
   }
 
+  Future<List<StMngrMst>?> findMngrSignIn(
+      String userId, String password) async {
+    if (prisma == null) initDatasource();
+
+    final items = await prisma?.stMngrMst.findMany(
+      where: STMNGRMSTWhereInput(
+        AND: [
+          STMNGRMSTWhereInput(
+            mngrId: StringFilter(equals: userId),
+          ),
+          STMNGRMSTWhereInput(
+            mngrPw: StringNullableFilter(equals: password),
+          ),
+        ],
+      ),
+    );
+
+    return items?.toList();
+  }
+
   ///
-  Future<List<BookAssetTbl>?> search(String keyword) async {
+  Future<List<BookAssetTbl>?> findBookAsset(String keyword) async {
     if (prisma == null) initDatasource();
 
     final items = await prisma?.bookAssetTbl.findMany(

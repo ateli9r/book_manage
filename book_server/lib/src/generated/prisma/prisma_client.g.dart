@@ -14116,14 +14116,6 @@ STMNGRMSTWhereInput _$STMNGRMSTWhereInputFromJson(Map<String, dynamic> json) =>
       joinDate: json['JOIN_DATE'] == null
           ? null
           : StringFilter.fromJson(json['JOIN_DATE'] as Map<String, dynamic>),
-      retireDate: json['RETIRE_DATE'] == null
-          ? null
-          : DateTimeFilter.fromJson(
-              json['RETIRE_DATE'] as Map<String, dynamic>),
-      pwdChgDate: json['PWD_CHG_DATE'] == null
-          ? null
-          : DateTimeFilter.fromJson(
-              json['PWD_CHG_DATE'] as Map<String, dynamic>),
       pwdWrongCnt: json['PWD_WRONG_CNT'] == null
           ? null
           : IntNullableFilter.fromJson(
@@ -14190,8 +14182,6 @@ Map<String, dynamic> _$STMNGRMSTWhereInputToJson(STMNGRMSTWhereInput instance) {
   writeNotNull('CLPH', instance.clph?.toJson());
   writeNotNull('EMP_NO', instance.empNo?.toJson());
   writeNotNull('JOIN_DATE', instance.joinDate?.toJson());
-  writeNotNull('RETIRE_DATE', instance.retireDate?.toJson());
-  writeNotNull('PWD_CHG_DATE', instance.pwdChgDate?.toJson());
   writeNotNull('PWD_WRONG_CNT', instance.pwdWrongCnt?.toJson());
   writeNotNull('PWD_WRONG_DATE', instance.pwdWrongDate?.toJson());
   writeNotNull('LST_LOGIN_DATE', instance.lstLoginDate?.toJson());
@@ -14219,8 +14209,6 @@ STMNGRMSTOrderByWithRelationInput _$STMNGRMSTOrderByWithRelationInputFromJson(
       clph: $enumDecodeNullable(_$SortOrderEnumMap, json['CLPH']),
       empNo: $enumDecodeNullable(_$SortOrderEnumMap, json['EMP_NO']),
       joinDate: $enumDecodeNullable(_$SortOrderEnumMap, json['JOIN_DATE']),
-      retireDate: $enumDecodeNullable(_$SortOrderEnumMap, json['RETIRE_DATE']),
-      pwdChgDate: $enumDecodeNullable(_$SortOrderEnumMap, json['PWD_CHG_DATE']),
       pwdWrongCnt:
           $enumDecodeNullable(_$SortOrderEnumMap, json['PWD_WRONG_CNT']),
       pwdWrongDate:
@@ -14257,8 +14245,6 @@ Map<String, dynamic> _$STMNGRMSTOrderByWithRelationInputToJson(
   writeNotNull('CLPH', _$SortOrderEnumMap[instance.clph]);
   writeNotNull('EMP_NO', _$SortOrderEnumMap[instance.empNo]);
   writeNotNull('JOIN_DATE', _$SortOrderEnumMap[instance.joinDate]);
-  writeNotNull('RETIRE_DATE', _$SortOrderEnumMap[instance.retireDate]);
-  writeNotNull('PWD_CHG_DATE', _$SortOrderEnumMap[instance.pwdChgDate]);
   writeNotNull('PWD_WRONG_CNT', _$SortOrderEnumMap[instance.pwdWrongCnt]);
   writeNotNull('PWD_WRONG_DATE', _$SortOrderEnumMap[instance.pwdWrongDate]);
   writeNotNull('LST_LOGIN_DATE', _$SortOrderEnumMap[instance.lstLoginDate]);
@@ -14306,10 +14292,6 @@ STMNGRMSTOrderByWithAggregationInput
           clph: $enumDecodeNullable(_$SortOrderEnumMap, json['CLPH']),
           empNo: $enumDecodeNullable(_$SortOrderEnumMap, json['EMP_NO']),
           joinDate: $enumDecodeNullable(_$SortOrderEnumMap, json['JOIN_DATE']),
-          retireDate:
-              $enumDecodeNullable(_$SortOrderEnumMap, json['RETIRE_DATE']),
-          pwdChgDate:
-              $enumDecodeNullable(_$SortOrderEnumMap, json['PWD_CHG_DATE']),
           pwdWrongCnt:
               $enumDecodeNullable(_$SortOrderEnumMap, json['PWD_WRONG_CNT']),
           pwdWrongDate:
@@ -14366,8 +14348,6 @@ Map<String, dynamic> _$STMNGRMSTOrderByWithAggregationInputToJson(
   writeNotNull('CLPH', _$SortOrderEnumMap[instance.clph]);
   writeNotNull('EMP_NO', _$SortOrderEnumMap[instance.empNo]);
   writeNotNull('JOIN_DATE', _$SortOrderEnumMap[instance.joinDate]);
-  writeNotNull('RETIRE_DATE', _$SortOrderEnumMap[instance.retireDate]);
-  writeNotNull('PWD_CHG_DATE', _$SortOrderEnumMap[instance.pwdChgDate]);
   writeNotNull('PWD_WRONG_CNT', _$SortOrderEnumMap[instance.pwdWrongCnt]);
   writeNotNull('PWD_WRONG_DATE', _$SortOrderEnumMap[instance.pwdWrongDate]);
   writeNotNull('LST_LOGIN_DATE', _$SortOrderEnumMap[instance.lstLoginDate]);
@@ -14440,14 +14420,6 @@ STMNGRMSTScalarWhereWithAggregatesInput
               ? null
               : StringWithAggregatesFilter.fromJson(
                   json['JOIN_DATE'] as Map<String, dynamic>),
-          retireDate: json['RETIRE_DATE'] == null
-              ? null
-              : DateTimeWithAggregatesFilter.fromJson(
-                  json['RETIRE_DATE'] as Map<String, dynamic>),
-          pwdChgDate: json['PWD_CHG_DATE'] == null
-              ? null
-              : DateTimeWithAggregatesFilter.fromJson(
-                  json['PWD_CHG_DATE'] as Map<String, dynamic>),
           pwdWrongCnt: json['PWD_WRONG_CNT'] == null
               ? null
               : IntNullableWithAggregatesFilter.fromJson(
@@ -14517,8 +14489,6 @@ Map<String, dynamic> _$STMNGRMSTScalarWhereWithAggregatesInputToJson(
   writeNotNull('CLPH', instance.clph?.toJson());
   writeNotNull('EMP_NO', instance.empNo?.toJson());
   writeNotNull('JOIN_DATE', instance.joinDate?.toJson());
-  writeNotNull('RETIRE_DATE', instance.retireDate?.toJson());
-  writeNotNull('PWD_CHG_DATE', instance.pwdChgDate?.toJson());
   writeNotNull('PWD_WRONG_CNT', instance.pwdWrongCnt?.toJson());
   writeNotNull('PWD_WRONG_DATE', instance.pwdWrongDate?.toJson());
   writeNotNull('LST_LOGIN_DATE', instance.lstLoginDate?.toJson());
@@ -38727,10 +38697,6 @@ STMNGRMSTCreateInput _$STMNGRMSTCreateInputFromJson(
       clph: json['CLPH'] as String?,
       empNo: json['EMP_NO'] as String?,
       joinDate: json['JOIN_DATE'] as String?,
-      retireDate: _$JsonConverterFromJson<String, DateTime>(
-          json['RETIRE_DATE'], const DateTimeJsonConverter().fromJson),
-      pwdChgDate: _$JsonConverterFromJson<String, DateTime>(
-          json['PWD_CHG_DATE'], const DateTimeJsonConverter().fromJson),
       pwdWrongCnt: json['PWD_WRONG_CNT'] as int?,
       pwdWrongDate: json['PWD_WRONG_DATE'] as String?,
       lstLoginDate: json['LST_LOGIN_DATE'] as String?,
@@ -38765,14 +38731,6 @@ Map<String, dynamic> _$STMNGRMSTCreateInputToJson(
   writeNotNull('CLPH', instance.clph);
   writeNotNull('EMP_NO', instance.empNo);
   writeNotNull('JOIN_DATE', instance.joinDate);
-  writeNotNull(
-      'RETIRE_DATE',
-      _$JsonConverterToJson<String, DateTime>(
-          instance.retireDate, const DateTimeJsonConverter().toJson));
-  writeNotNull(
-      'PWD_CHG_DATE',
-      _$JsonConverterToJson<String, DateTime>(
-          instance.pwdChgDate, const DateTimeJsonConverter().toJson));
   writeNotNull('PWD_WRONG_CNT', instance.pwdWrongCnt);
   writeNotNull('PWD_WRONG_DATE', instance.pwdWrongDate);
   writeNotNull('LST_LOGIN_DATE', instance.lstLoginDate);
@@ -38800,10 +38758,6 @@ STMNGRMSTUncheckedCreateInput _$STMNGRMSTUncheckedCreateInputFromJson(
       clph: json['CLPH'] as String?,
       empNo: json['EMP_NO'] as String?,
       joinDate: json['JOIN_DATE'] as String?,
-      retireDate: _$JsonConverterFromJson<String, DateTime>(
-          json['RETIRE_DATE'], const DateTimeJsonConverter().fromJson),
-      pwdChgDate: _$JsonConverterFromJson<String, DateTime>(
-          json['PWD_CHG_DATE'], const DateTimeJsonConverter().fromJson),
       pwdWrongCnt: json['PWD_WRONG_CNT'] as int?,
       pwdWrongDate: json['PWD_WRONG_DATE'] as String?,
       lstLoginDate: json['LST_LOGIN_DATE'] as String?,
@@ -38838,14 +38792,6 @@ Map<String, dynamic> _$STMNGRMSTUncheckedCreateInputToJson(
   writeNotNull('CLPH', instance.clph);
   writeNotNull('EMP_NO', instance.empNo);
   writeNotNull('JOIN_DATE', instance.joinDate);
-  writeNotNull(
-      'RETIRE_DATE',
-      _$JsonConverterToJson<String, DateTime>(
-          instance.retireDate, const DateTimeJsonConverter().toJson));
-  writeNotNull(
-      'PWD_CHG_DATE',
-      _$JsonConverterToJson<String, DateTime>(
-          instance.pwdChgDate, const DateTimeJsonConverter().toJson));
   writeNotNull('PWD_WRONG_CNT', instance.pwdWrongCnt);
   writeNotNull('PWD_WRONG_DATE', instance.pwdWrongDate);
   writeNotNull('LST_LOGIN_DATE', instance.lstLoginDate);
@@ -38903,14 +38849,6 @@ STMNGRMSTUpdateInput _$STMNGRMSTUpdateInputFromJson(
           ? null
           : StringFieldUpdateOperationsInput.fromJson(
               json['JOIN_DATE'] as Map<String, dynamic>),
-      retireDate: json['RETIRE_DATE'] == null
-          ? null
-          : DateTimeFieldUpdateOperationsInput.fromJson(
-              json['RETIRE_DATE'] as Map<String, dynamic>),
-      pwdChgDate: json['PWD_CHG_DATE'] == null
-          ? null
-          : DateTimeFieldUpdateOperationsInput.fromJson(
-              json['PWD_CHG_DATE'] as Map<String, dynamic>),
       pwdWrongCnt: json['PWD_WRONG_CNT'] == null
           ? null
           : NullableIntFieldUpdateOperationsInput.fromJson(
@@ -38977,8 +38915,6 @@ Map<String, dynamic> _$STMNGRMSTUpdateInputToJson(
   writeNotNull('CLPH', instance.clph?.toJson());
   writeNotNull('EMP_NO', instance.empNo?.toJson());
   writeNotNull('JOIN_DATE', instance.joinDate?.toJson());
-  writeNotNull('RETIRE_DATE', instance.retireDate?.toJson());
-  writeNotNull('PWD_CHG_DATE', instance.pwdChgDate?.toJson());
   writeNotNull('PWD_WRONG_CNT', instance.pwdWrongCnt?.toJson());
   writeNotNull('PWD_WRONG_DATE', instance.pwdWrongDate?.toJson());
   writeNotNull('LST_LOGIN_DATE', instance.lstLoginDate?.toJson());
@@ -39036,14 +38972,6 @@ STMNGRMSTUncheckedUpdateInput _$STMNGRMSTUncheckedUpdateInputFromJson(
           ? null
           : StringFieldUpdateOperationsInput.fromJson(
               json['JOIN_DATE'] as Map<String, dynamic>),
-      retireDate: json['RETIRE_DATE'] == null
-          ? null
-          : DateTimeFieldUpdateOperationsInput.fromJson(
-              json['RETIRE_DATE'] as Map<String, dynamic>),
-      pwdChgDate: json['PWD_CHG_DATE'] == null
-          ? null
-          : DateTimeFieldUpdateOperationsInput.fromJson(
-              json['PWD_CHG_DATE'] as Map<String, dynamic>),
       pwdWrongCnt: json['PWD_WRONG_CNT'] == null
           ? null
           : NullableIntFieldUpdateOperationsInput.fromJson(
@@ -39110,8 +39038,6 @@ Map<String, dynamic> _$STMNGRMSTUncheckedUpdateInputToJson(
   writeNotNull('CLPH', instance.clph?.toJson());
   writeNotNull('EMP_NO', instance.empNo?.toJson());
   writeNotNull('JOIN_DATE', instance.joinDate?.toJson());
-  writeNotNull('RETIRE_DATE', instance.retireDate?.toJson());
-  writeNotNull('PWD_CHG_DATE', instance.pwdChgDate?.toJson());
   writeNotNull('PWD_WRONG_CNT', instance.pwdWrongCnt?.toJson());
   writeNotNull('PWD_WRONG_DATE', instance.pwdWrongDate?.toJson());
   writeNotNull('LST_LOGIN_DATE', instance.lstLoginDate?.toJson());
@@ -39139,10 +39065,6 @@ STMNGRMSTCreateManyInput _$STMNGRMSTCreateManyInputFromJson(
       clph: json['CLPH'] as String?,
       empNo: json['EMP_NO'] as String?,
       joinDate: json['JOIN_DATE'] as String?,
-      retireDate: _$JsonConverterFromJson<String, DateTime>(
-          json['RETIRE_DATE'], const DateTimeJsonConverter().fromJson),
-      pwdChgDate: _$JsonConverterFromJson<String, DateTime>(
-          json['PWD_CHG_DATE'], const DateTimeJsonConverter().fromJson),
       pwdWrongCnt: json['PWD_WRONG_CNT'] as int?,
       pwdWrongDate: json['PWD_WRONG_DATE'] as String?,
       lstLoginDate: json['LST_LOGIN_DATE'] as String?,
@@ -39177,14 +39099,6 @@ Map<String, dynamic> _$STMNGRMSTCreateManyInputToJson(
   writeNotNull('CLPH', instance.clph);
   writeNotNull('EMP_NO', instance.empNo);
   writeNotNull('JOIN_DATE', instance.joinDate);
-  writeNotNull(
-      'RETIRE_DATE',
-      _$JsonConverterToJson<String, DateTime>(
-          instance.retireDate, const DateTimeJsonConverter().toJson));
-  writeNotNull(
-      'PWD_CHG_DATE',
-      _$JsonConverterToJson<String, DateTime>(
-          instance.pwdChgDate, const DateTimeJsonConverter().toJson));
   writeNotNull('PWD_WRONG_CNT', instance.pwdWrongCnt);
   writeNotNull('PWD_WRONG_DATE', instance.pwdWrongDate);
   writeNotNull('LST_LOGIN_DATE', instance.lstLoginDate);
@@ -39242,14 +39156,6 @@ STMNGRMSTUpdateManyMutationInput _$STMNGRMSTUpdateManyMutationInputFromJson(
           ? null
           : StringFieldUpdateOperationsInput.fromJson(
               json['JOIN_DATE'] as Map<String, dynamic>),
-      retireDate: json['RETIRE_DATE'] == null
-          ? null
-          : DateTimeFieldUpdateOperationsInput.fromJson(
-              json['RETIRE_DATE'] as Map<String, dynamic>),
-      pwdChgDate: json['PWD_CHG_DATE'] == null
-          ? null
-          : DateTimeFieldUpdateOperationsInput.fromJson(
-              json['PWD_CHG_DATE'] as Map<String, dynamic>),
       pwdWrongCnt: json['PWD_WRONG_CNT'] == null
           ? null
           : NullableIntFieldUpdateOperationsInput.fromJson(
@@ -39316,8 +39222,6 @@ Map<String, dynamic> _$STMNGRMSTUpdateManyMutationInputToJson(
   writeNotNull('CLPH', instance.clph?.toJson());
   writeNotNull('EMP_NO', instance.empNo?.toJson());
   writeNotNull('JOIN_DATE', instance.joinDate?.toJson());
-  writeNotNull('RETIRE_DATE', instance.retireDate?.toJson());
-  writeNotNull('PWD_CHG_DATE', instance.pwdChgDate?.toJson());
   writeNotNull('PWD_WRONG_CNT', instance.pwdWrongCnt?.toJson());
   writeNotNull('PWD_WRONG_DATE', instance.pwdWrongDate?.toJson());
   writeNotNull('LST_LOGIN_DATE', instance.lstLoginDate?.toJson());
@@ -39375,14 +39279,6 @@ STMNGRMSTUncheckedUpdateManyInput _$STMNGRMSTUncheckedUpdateManyInputFromJson(
           ? null
           : StringFieldUpdateOperationsInput.fromJson(
               json['JOIN_DATE'] as Map<String, dynamic>),
-      retireDate: json['RETIRE_DATE'] == null
-          ? null
-          : DateTimeFieldUpdateOperationsInput.fromJson(
-              json['RETIRE_DATE'] as Map<String, dynamic>),
-      pwdChgDate: json['PWD_CHG_DATE'] == null
-          ? null
-          : DateTimeFieldUpdateOperationsInput.fromJson(
-              json['PWD_CHG_DATE'] as Map<String, dynamic>),
       pwdWrongCnt: json['PWD_WRONG_CNT'] == null
           ? null
           : NullableIntFieldUpdateOperationsInput.fromJson(
@@ -39449,8 +39345,6 @@ Map<String, dynamic> _$STMNGRMSTUncheckedUpdateManyInputToJson(
   writeNotNull('CLPH', instance.clph?.toJson());
   writeNotNull('EMP_NO', instance.empNo?.toJson());
   writeNotNull('JOIN_DATE', instance.joinDate?.toJson());
-  writeNotNull('RETIRE_DATE', instance.retireDate?.toJson());
-  writeNotNull('PWD_CHG_DATE', instance.pwdChgDate?.toJson());
   writeNotNull('PWD_WRONG_CNT', instance.pwdWrongCnt?.toJson());
   writeNotNull('PWD_WRONG_DATE', instance.pwdWrongDate?.toJson());
   writeNotNull('LST_LOGIN_DATE', instance.lstLoginDate?.toJson());
@@ -53789,10 +53683,6 @@ STMNGRMSTCountOrderByAggregateInput
           clph: $enumDecodeNullable(_$SortOrderEnumMap, json['CLPH']),
           empNo: $enumDecodeNullable(_$SortOrderEnumMap, json['EMP_NO']),
           joinDate: $enumDecodeNullable(_$SortOrderEnumMap, json['JOIN_DATE']),
-          retireDate:
-              $enumDecodeNullable(_$SortOrderEnumMap, json['RETIRE_DATE']),
-          pwdChgDate:
-              $enumDecodeNullable(_$SortOrderEnumMap, json['PWD_CHG_DATE']),
           pwdWrongCnt:
               $enumDecodeNullable(_$SortOrderEnumMap, json['PWD_WRONG_CNT']),
           pwdWrongDate:
@@ -53829,8 +53719,6 @@ Map<String, dynamic> _$STMNGRMSTCountOrderByAggregateInputToJson(
   writeNotNull('CLPH', _$SortOrderEnumMap[instance.clph]);
   writeNotNull('EMP_NO', _$SortOrderEnumMap[instance.empNo]);
   writeNotNull('JOIN_DATE', _$SortOrderEnumMap[instance.joinDate]);
-  writeNotNull('RETIRE_DATE', _$SortOrderEnumMap[instance.retireDate]);
-  writeNotNull('PWD_CHG_DATE', _$SortOrderEnumMap[instance.pwdChgDate]);
   writeNotNull('PWD_WRONG_CNT', _$SortOrderEnumMap[instance.pwdWrongCnt]);
   writeNotNull('PWD_WRONG_DATE', _$SortOrderEnumMap[instance.pwdWrongDate]);
   writeNotNull('LST_LOGIN_DATE', _$SortOrderEnumMap[instance.lstLoginDate]);
@@ -53879,8 +53767,6 @@ STMNGRMSTMaxOrderByAggregateInput _$STMNGRMSTMaxOrderByAggregateInputFromJson(
       clph: $enumDecodeNullable(_$SortOrderEnumMap, json['CLPH']),
       empNo: $enumDecodeNullable(_$SortOrderEnumMap, json['EMP_NO']),
       joinDate: $enumDecodeNullable(_$SortOrderEnumMap, json['JOIN_DATE']),
-      retireDate: $enumDecodeNullable(_$SortOrderEnumMap, json['RETIRE_DATE']),
-      pwdChgDate: $enumDecodeNullable(_$SortOrderEnumMap, json['PWD_CHG_DATE']),
       pwdWrongCnt:
           $enumDecodeNullable(_$SortOrderEnumMap, json['PWD_WRONG_CNT']),
       pwdWrongDate:
@@ -53917,8 +53803,6 @@ Map<String, dynamic> _$STMNGRMSTMaxOrderByAggregateInputToJson(
   writeNotNull('CLPH', _$SortOrderEnumMap[instance.clph]);
   writeNotNull('EMP_NO', _$SortOrderEnumMap[instance.empNo]);
   writeNotNull('JOIN_DATE', _$SortOrderEnumMap[instance.joinDate]);
-  writeNotNull('RETIRE_DATE', _$SortOrderEnumMap[instance.retireDate]);
-  writeNotNull('PWD_CHG_DATE', _$SortOrderEnumMap[instance.pwdChgDate]);
   writeNotNull('PWD_WRONG_CNT', _$SortOrderEnumMap[instance.pwdWrongCnt]);
   writeNotNull('PWD_WRONG_DATE', _$SortOrderEnumMap[instance.pwdWrongDate]);
   writeNotNull('LST_LOGIN_DATE', _$SortOrderEnumMap[instance.lstLoginDate]);
@@ -53946,8 +53830,6 @@ STMNGRMSTMinOrderByAggregateInput _$STMNGRMSTMinOrderByAggregateInputFromJson(
       clph: $enumDecodeNullable(_$SortOrderEnumMap, json['CLPH']),
       empNo: $enumDecodeNullable(_$SortOrderEnumMap, json['EMP_NO']),
       joinDate: $enumDecodeNullable(_$SortOrderEnumMap, json['JOIN_DATE']),
-      retireDate: $enumDecodeNullable(_$SortOrderEnumMap, json['RETIRE_DATE']),
-      pwdChgDate: $enumDecodeNullable(_$SortOrderEnumMap, json['PWD_CHG_DATE']),
       pwdWrongCnt:
           $enumDecodeNullable(_$SortOrderEnumMap, json['PWD_WRONG_CNT']),
       pwdWrongDate:
@@ -53984,8 +53866,6 @@ Map<String, dynamic> _$STMNGRMSTMinOrderByAggregateInputToJson(
   writeNotNull('CLPH', _$SortOrderEnumMap[instance.clph]);
   writeNotNull('EMP_NO', _$SortOrderEnumMap[instance.empNo]);
   writeNotNull('JOIN_DATE', _$SortOrderEnumMap[instance.joinDate]);
-  writeNotNull('RETIRE_DATE', _$SortOrderEnumMap[instance.retireDate]);
-  writeNotNull('PWD_CHG_DATE', _$SortOrderEnumMap[instance.pwdChgDate]);
   writeNotNull('PWD_WRONG_CNT', _$SortOrderEnumMap[instance.pwdWrongCnt]);
   writeNotNull('PWD_WRONG_DATE', _$SortOrderEnumMap[instance.pwdWrongDate]);
   writeNotNull('LST_LOGIN_DATE', _$SortOrderEnumMap[instance.lstLoginDate]);
@@ -60280,10 +60160,6 @@ StMngrMst _$StMngrMstFromJson(Map<String, dynamic> json) => StMngrMst(
       clph: json['CLPH'] as String?,
       empNo: json['EMP_NO'] as String?,
       joinDate: json['JOIN_DATE'] as String,
-      retireDate:
-          const DateTimeJsonConverter().fromJson(json['RETIRE_DATE'] as String),
-      pwdChgDate: const DateTimeJsonConverter()
-          .fromJson(json['PWD_CHG_DATE'] as String),
       pwdWrongCnt: json['PWD_WRONG_CNT'] as int?,
       pwdWrongDate: json['PWD_WRONG_DATE'] as String?,
       lstLoginDate: json['LST_LOGIN_DATE'] as String?,
@@ -60317,10 +60193,6 @@ Map<String, dynamic> _$StMngrMstToJson(StMngrMst instance) {
   writeNotNull('CLPH', instance.clph);
   writeNotNull('EMP_NO', instance.empNo);
   val['JOIN_DATE'] = instance.joinDate;
-  val['RETIRE_DATE'] =
-      const DateTimeJsonConverter().toJson(instance.retireDate);
-  val['PWD_CHG_DATE'] =
-      const DateTimeJsonConverter().toJson(instance.pwdChgDate);
   writeNotNull('PWD_WRONG_CNT', instance.pwdWrongCnt);
   writeNotNull('PWD_WRONG_DATE', instance.pwdWrongDate);
   writeNotNull('LST_LOGIN_DATE', instance.lstLoginDate);
@@ -62927,10 +62799,6 @@ STMNGRMSTGroupByOutputType _$STMNGRMSTGroupByOutputTypeFromJson(
       clph: json['CLPH'] as String?,
       empNo: json['EMP_NO'] as String?,
       joinDate: json['JOIN_DATE'] as String?,
-      retireDate: _$JsonConverterFromJson<String, DateTime>(
-          json['RETIRE_DATE'], const DateTimeJsonConverter().fromJson),
-      pwdChgDate: _$JsonConverterFromJson<String, DateTime>(
-          json['PWD_CHG_DATE'], const DateTimeJsonConverter().fromJson),
       pwdWrongCnt: json['PWD_WRONG_CNT'] as int?,
       pwdWrongDate: json['PWD_WRONG_DATE'] as String?,
       lstLoginDate: json['LST_LOGIN_DATE'] as String?,
@@ -62964,14 +62832,6 @@ Map<String, dynamic> _$STMNGRMSTGroupByOutputTypeToJson(
   writeNotNull('CLPH', instance.clph);
   writeNotNull('EMP_NO', instance.empNo);
   writeNotNull('JOIN_DATE', instance.joinDate);
-  writeNotNull(
-      'RETIRE_DATE',
-      _$JsonConverterToJson<String, DateTime>(
-          instance.retireDate, const DateTimeJsonConverter().toJson));
-  writeNotNull(
-      'PWD_CHG_DATE',
-      _$JsonConverterToJson<String, DateTime>(
-          instance.pwdChgDate, const DateTimeJsonConverter().toJson));
   writeNotNull('PWD_WRONG_CNT', instance.pwdWrongCnt);
   writeNotNull('PWD_WRONG_DATE', instance.pwdWrongDate);
   writeNotNull('LST_LOGIN_DATE', instance.lstLoginDate);
