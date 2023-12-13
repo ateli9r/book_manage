@@ -9,27 +9,25 @@ class UserDatabase {
 
   Future<Map?> login({required String userId, required String password}) async {
     final data = Future.sync(() async {
-      // List<Book> ret = [];
-      Map<String, String> map = {};
+      Map<String, Object> ret = {};
+      ret["isSuccess"] = false;
 
       try {
         final response = await client.post(
-          Uri.parse('http://192.168.0.146:8080/search'),
+          Uri.parse('http://192.168.0.146:8080/login'),
           headers: {
             'Content-Type': 'application/json',
           },
-          body: jsonEncode({
-            // 'keyword': keyword,
-          }),
+          body: jsonEncode({'userId': userId, 'password': password}),
         );
 
-        final resp = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+        final respData = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+        print(respData);
 
-        if (resp['isSuccess'] as bool == true) {}
+        ret["isSuccess"] = respData['isSuccess'];
       } finally {}
 
-      // return ret;
-      return null;
+      return ret;
     });
 
     return data;

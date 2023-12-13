@@ -79,14 +79,9 @@ void main() {
       home: BookListWidget(httpClient: client),
     ));
 
-    print('test#1');
-
     final txt = find.text('CODE');
-    print(txt);
 
     await tester.pumpAndSettle();
-
-    print('test#2');
 
     final ttt = find.byElementType(BookListItem);
     print(ttt);
