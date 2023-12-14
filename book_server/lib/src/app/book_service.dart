@@ -51,6 +51,7 @@ class BookService {
         bookNm: item.bookNm!,
         assetNo: item.assetNo,
         publisher: item.publisher ?? '',
+        seq: item.seq,
       );
 
       ret.add(book);
@@ -69,6 +70,9 @@ class BookService {
       bookNm: item.bookNm!,
       assetNo: item.assetNo,
       publisher: item.publisher ?? '',
+      rentYn: item.rentYn,
+      rentUser: item.rentUser,
+      seq: item.seq,
     );
   }
 }

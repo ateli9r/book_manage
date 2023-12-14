@@ -79,4 +79,15 @@ class BookDatabase {
 
     return items?.toList();
   }
+
+  void updateBook(Book book) async {
+    // if (prisma == null) initDatasource();
+
+    // final book = await prisma?.bookAssetTbl.update(
+    //   where: const BOOKASSETTBLWhereUniqueInput(
+    //     seq: BigInt.from(book.seq),
+    //   ),
+    //   data: BOOKASSETTBLUpdateInput(),
+    // );
+  }
 }
