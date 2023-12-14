@@ -67,29 +67,4 @@ void main() {
   // test('new test', () {
   //   expect(1, equals(0));
   // });
-
-  testWidgets('[도서조회] 데이터 갯수에 따라 아이템 위젯 매핑', (WidgetTester tester) async {
-    final client = BookListMockClient();
-
-    final db = BookDatabase(client: client);
-    final data = await db.search('');
-    print(data);
-
-    await tester.pumpWidget(MaterialApp(
-      home: BookListWidget(httpClient: client),
-    ));
-
-    final txt = find.text('TCP/IP');
-
-    await tester.pumpAndSettle();
-
-    final ttt = find.byElementType(BookListItem);
-    print(ttt);
-  });
-
-  testWidgets('[도서조회] 아이템 위젯을 탭 하면 상세화면으로 이동', (WidgetTester tester) async {
-    // await tester.pumpWidget(BookListWidget());
-    // expect(1, equals(0));
-    throw Exception('not impl');
-  });
 }

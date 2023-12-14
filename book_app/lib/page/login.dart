@@ -8,6 +8,7 @@
 ///
 
 import 'package:book_app/app/book_service.dart';
+import 'package:book_app/app/common_util.dart';
 import 'package:book_app/app/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -73,25 +74,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
               padding: const EdgeInsets.only(top: 20.0),
               child: ElevatedButton(
                 onPressed: () async {
-                  print('userId: $_userId / password: $_password');
-
                   if (_userId.isEmpty || _password.isEmpty) {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: const Text('error'),
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('ok'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                    CommonUtil.shared
+                        .showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
                     return;
                   }
 
@@ -107,33 +92,19 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     _isLoading = false;
                   });
 
-                  if (respData['isSuccess'] == true) {
-                    UserInfo data = UserInfo(
-                      userId: _userId,
-                      UserNm: '#UserNm',
-                      deptCd: '#deptCd',
-                    );
-
-                    widget.setUserInfo(data);
-                  } else {
-                    print('error!');
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: const Text('error'),
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('ok'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                  if (!respData['isSuccess']) {
+                    CommonUtil.shared
+                        .showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
+                    return;
                   }
+
+                  UserInfo data = UserInfo(
+                    userId: _userId,
+                    UserNm: '#UserNm',
+                    deptCd: '#deptCd',
+                  );
+
+                  widget.setUserInfo(data);
                 },
                 child: const Text('로그인'),
               ),
