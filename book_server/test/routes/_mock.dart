@@ -38,33 +38,43 @@ class SearchMockRequestContext extends Mock implements RequestContext {
 }
 
 class ViewMockRequestContext extends Mock implements RequestContext {
-  ViewMockRequestContext({required this.keyword});
+  ViewMockRequestContext({required this.assetNo});
 
-  final String keyword;
-
-  @override
-  Request get request => Request(
-        'GET',
-        Uri(scheme: 'http', host: 'localhost', port: 8080, path: '/view'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({'keyword': keyword}),
-      );
-}
-
-class RentMockRequestContext extends Mock implements RequestContext {
-  RentMockRequestContext({required this.keyword});
-
-  final String keyword;
+  final String assetNo;
 
   @override
   Request get request => Request(
         'POST',
-        Uri(scheme: 'http', host: '192.168.0.146', port: 8080, path: '/search'),
+        Uri(scheme: 'http', host: 'localhost', port: 8080, path: '/view'),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({'keyword': keyword}),
+        body: jsonEncode({'assetNo': assetNo}),
+      );
+}
+
+class RentMockRequestContext extends Mock implements RequestContext {
+  RentMockRequestContext({
+    required this.userId,
+    required this.assetNo,
+    required this.reqCode,
+  });
+
+  final String userId;
+  final String assetNo;
+  final String reqCode;
+
+  @override
+  Request get request => Request(
+        'POST',
+        Uri(scheme: 'http', host: '192.168.0.146', port: 8080, path: '/rent'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'userId': userId,
+          'assetNo': assetNo,
+          'reqCode': reqCode,
+        }),
       );
 }

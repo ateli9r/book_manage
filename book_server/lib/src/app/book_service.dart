@@ -57,4 +57,18 @@ class BookService {
     });
     return ret;
   }
+
+  Future<Book?> detail(String assetNo) async {
+    final database = BookDatabase();
+    final items = await database.findBookAsset(assetNo);
+    if (items == null) return null;
+    if (items.isEmpty) return null;
+
+    final item = items[0];
+    return Book(
+      bookNm: item.bookNm!,
+      assetNo: item.assetNo,
+      publisher: item.publisher ?? '',
+    );
+  }
 }

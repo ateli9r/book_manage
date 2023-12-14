@@ -57,16 +57,16 @@ void main() {
         expect((respData['data'] as List).length, equals(1));
       }),
       test('게시 불가 도서는 상세조회 되지 않음', () async {
-        final context = ViewMockRequestContext(keyword: '');
+        final context = ViewMockRequestContext(assetNo: '관리-B-0001');
 
         final response = await route_view.onRequest(context);
         expect(response.statusCode, equals(HttpStatus.ok));
 
         final respData = await response.json() as Map;
-        expect(respData['isSuccess'], equals(true));
+        expect(respData['isSuccess'], equals(false));
       }),
       test('게시 허가 도서는 상세조회 가능함', () async {
-        final context = ViewMockRequestContext(keyword: '');
+        final context = ViewMockRequestContext(assetNo: '관리-B-0005');
 
         final response = await route_view.onRequest(context);
         expect(response.statusCode, equals(HttpStatus.ok));
@@ -81,7 +81,11 @@ void main() {
     '대출 api',
     () => {
       test('이중 대출은 되지 않음', () async {
-        final context = RentMockRequestContext(keyword: '');
+        final context = RentMockRequestContext(
+          userId: 'htlee',
+          assetNo: '관리-B-0005',
+          reqCode: 'rent',
+        );
 
         final response = await route_rent.onRequest(context);
         expect(response.statusCode, equals(HttpStatus.ok));
@@ -90,7 +94,11 @@ void main() {
         expect(respData['isSuccess'], equals(true));
       }),
       test('대출하지 않은 책은 반납 할 수 없음', () async {
-        final context = RentMockRequestContext(keyword: '');
+        final context = RentMockRequestContext(
+          userId: 'htlee',
+          assetNo: '관리-B-0005',
+          reqCode: 'return',
+        );
 
         final response = await route_rent.onRequest(context);
         expect(response.statusCode, equals(HttpStatus.ok));
@@ -99,7 +107,11 @@ void main() {
         expect(respData['isSuccess'], equals(true));
       }),
       test('게시 금지 도서는 대출 할 수 없음', () async {
-        final context = RentMockRequestContext(keyword: '');
+        final context = RentMockRequestContext(
+          userId: 'htlee',
+          assetNo: '관리-B-0001',
+          reqCode: 'rent',
+        );
 
         final response = await route_rent.onRequest(context);
         expect(response.statusCode, equals(HttpStatus.ok));
@@ -108,7 +120,11 @@ void main() {
         expect(respData['isSuccess'], equals(true));
       }),
       test('게시 허가 도서는 대출 가능함', () async {
-        final context = RentMockRequestContext(keyword: '');
+        final context = RentMockRequestContext(
+          userId: 'htlee',
+          assetNo: '관리-B-0005',
+          reqCode: 'return',
+        );
 
         final response = await route_rent.onRequest(context);
         expect(response.statusCode, equals(HttpStatus.ok));
