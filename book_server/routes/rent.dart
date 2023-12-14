@@ -1,6 +1,14 @@
 import 'package:dart_frog/dart_frog.dart';
 
-Response onRequest(RequestContext context) {
-  // TODO: implement route handler
-  return Response(body: 'This is a new route!');
+Future<Response> onRequest(RequestContext context) async {
+  final ret = <String, dynamic>{};
+  ret['isSuccess'] = false;
+
+  final request = context.request;
+  if (request.method.value == 'POST' &&
+      request.headers['Content-Type']!.startsWith('application/json')) {
+    final body = await request.json();
+  }
+
+  return Response.json(body: ret);
 }

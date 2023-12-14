@@ -37,8 +37,8 @@ class SearchMockRequestContext extends Mock implements RequestContext {
       );
 }
 
-class DetailMockRequestContext extends Mock implements RequestContext {
-  DetailMockRequestContext({required this.keyword});
+class ViewMockRequestContext extends Mock implements RequestContext {
+  ViewMockRequestContext({required this.keyword});
 
   final String keyword;
 
