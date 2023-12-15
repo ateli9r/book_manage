@@ -1,14 +1,13 @@
-import 'package:book_server/src/app/book_database.dart';
-import 'package:book_server/src/app/book_domain.dart';
-import 'package:book_server/src/generated/prisma/prisma_client.dart';
-import 'package:orm/logger.dart';
 import 'dart:convert';
 import 'dart:typed_data';
+
+import 'package:book_server/src/app/book_database.dart';
+import 'package:book_server/src/app/book_domain.dart';
 import 'package:crypto/crypto.dart';
 
-///
+/// 도서 서비스
 class BookService {
-  ///
+  /// 생성자
   factory BookService() {
     return _instance;
   }
@@ -16,9 +15,7 @@ class BookService {
   BookService._privateConstructor();
   static final BookService _instance = BookService._privateConstructor();
 
-  // UserService._privateConstructor();
-  // static final UserService _instance = UserService._privateConstructor();
-
+  /// 비밀번호 해시 생성
   String encryptPassword(String userId, String password) {
     final bufferId = utf8.encode(userId);
     final bufferPw = utf8.encode(password);
@@ -30,28 +27,27 @@ class BookService {
     return base64.encode(sha256.convert(data).bytes);
   }
 
+  /// 로그인
   Future<bool> signIn(String userId, String password) async {
     final passwordHash = encryptPassword(userId, password);
-
-    final database = BookDatabase();
-    final items = await database.findMngrSignIn(userId, passwordHash);
+    final items = await BookDatabase().findMngrSignIn(userId, passwordHash);
 
     return items != null && items.length == 1;
   }
 
+  /// 도서 목록 조회
   Future<List<Book>> search(String keyword) async {
     final ret = <Book>[];
-    final database = BookDatabase();
-    final items = await database.findBookAsset(keyword);
+    final items = await BookDatabase().findBookAsset(keyword);
 
     items?.forEach((item) {
       if (item.bookNm == null) return;
 
       var book = Book(
+        seq: item.seq.toInt(),
         bookNm: item.bookNm!,
         assetNo: item.assetNo,
         publisher: item.publisher ?? '',
-        seq: item.seq,
       );
 
       ret.add(book);
@@ -59,20 +55,25 @@ class BookService {
     return ret;
   }
 
+  /// 도서 상세 조회
   Future<Book?> detail(String assetNo) async {
-    final database = BookDatabase();
-    final items = await database.findBookAsset(assetNo);
+    final items = await BookDatabase().findBookAsset(assetNo);
     if (items == null) return null;
     if (items.isEmpty) return null;
 
     final item = items[0];
     return Book(
+      seq: item.seq.toInt(),
       bookNm: item.bookNm!,
       assetNo: item.assetNo,
       publisher: item.publisher ?? '',
       rentYn: item.rentYn,
       rentUser: item.rentUser,
-      seq: item.seq,
     );
+  }
+
+  /// 도서 대출/반납
+  Future<bool> rent(Book book) async {
+    return BookDatabase().updateBookRent(book);
   }
 }

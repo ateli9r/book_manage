@@ -108,7 +108,7 @@ void main() {
         // 이중 대출 요청
         if (testStep == 2) {
           final context = RentMockRequestContext(
-            userId: 'htlee',
+            userId: 'anothor_user',
             assetNo: '관리-B-0005',
             reqCode: 'rent',
           );
@@ -118,11 +118,27 @@ void main() {
 
           final respData = await response.json() as Map;
           expect(respData['isSuccess'], equals(false));
+
+          testStep++;
+        }
+        // 반납 요청
+        if (testStep == 3) {
+          final context = RentMockRequestContext(
+            userId: 'htlee',
+            assetNo: '관리-B-0005',
+            reqCode: 'return',
+          );
+
+          final response = await route_rent.onRequest(context);
+          expect(response.statusCode, equals(HttpStatus.ok));
+
+          final respData = await response.json() as Map;
+          expect(respData['isSuccess'], equals(true));
         }
       }),
       test('대출하지 않은 책은 반납 할 수 없음', () async {
         var testStep = 1;
-        // 반납할 수 있는 책인지 검사
+        // 대출 할 수 있는 책인지 검사
         if (testStep == 1) {
           final context = ViewMockRequestContext(assetNo: '관리-B-0005');
 
@@ -134,7 +150,7 @@ void main() {
           expect(respData['data'], isNotNull);
 
           final book = Book.fromJson(respData['data'] as Map<String, dynamic>);
-          expect(book.rentUser, isNull);
+          expect(book.rentUser, anyOf([isNull, isEmpty]));
 
           testStep++;
         }
@@ -199,7 +215,7 @@ void main() {
           expect(respData['data'], isNotNull);
 
           final book = Book.fromJson(respData['data'] as Map<String, dynamic>);
-          expect(book.rentUser, isNull);
+          expect(book.rentUser, anyOf([isNull, isEmpty]));
 
           testStep++;
         }
@@ -209,6 +225,22 @@ void main() {
             userId: 'htlee',
             assetNo: '관리-B-0005',
             reqCode: 'rent',
+          );
+
+          final response = await route_rent.onRequest(context);
+          expect(response.statusCode, equals(HttpStatus.ok));
+
+          final respData = await response.json() as Map;
+          expect(respData['isSuccess'], equals(true));
+
+          testStep++;
+        }
+        // 반납 요청
+        if (testStep == 3) {
+          final context = RentMockRequestContext(
+            userId: 'htlee',
+            assetNo: '관리-B-0005',
+            reqCode: 'return',
           );
 
           final response = await route_rent.onRequest(context);

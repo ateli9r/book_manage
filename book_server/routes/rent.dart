@@ -10,26 +10,32 @@ Future<Response> onRequest(RequestContext context) async {
       request.headers['Content-Type']!.startsWith('application/json')) {
     final body = await request.json();
 
-    // final context = RentMockRequestContext(
-    //   userId: 'htlee',
-    //   assetNo: '관리-B-0005',
-    //   reqCode: 'return',
-    // );
-
     final userId = body['userId'] as String;
     final assetNo = body['assetNo'] as String;
     final reqCode = body['reqCode'] as String;
 
-    final book = BookService().detail(assetNo);
-    if (book == null) throw Exception('book not found');
+    final book = await BookService().detail(assetNo);
+    if (book == null) return Response.json(body: ret);
 
-    // final assetNo = body['assetNo'] as String;
-    // final data = await BookService().detail(assetNo);
+    if (reqCode == 'rent') {
+      // 이중 대출은 되지 않음
+      if (book.rentYn == 'N') {
+        book
+          ..rentYn = 'Y'
+          ..rentUser = userId;
 
-    // if (data != null) {
-    //   ret['isSuccess'] = true;
-    //   ret['data'] = data;
-    // }
+        ret['isSuccess'] = await BookService().rent(book);
+      }
+    } else if (reqCode == 'return') {
+      // 대출하지 않은 책은 반납 할 수 없음
+      if (book.rentYn == 'Y' && book.rentUser == userId) {
+        book
+          ..rentYn = 'N'
+          ..rentUser = '';
+
+        ret['isSuccess'] = await BookService().rent(book);
+      }
+    }
   }
 
   return Response.json(body: ret);

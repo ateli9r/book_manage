@@ -2,32 +2,35 @@
 class Book {
   /// 생성자
   Book({
+    required this.seq,
     required this.bookNm,
     required this.assetNo,
     required this.publisher,
     this.rentYn,
     this.rentUser,
-    this.seq,
   });
 
   /// json -> domain
   Book.fromJson(Map<String, dynamic> json)
-      : bookNm = json['bookNm'] as String,
+      : seq = json['seq'] as int,
+        bookNm = json['bookNm'] as String,
         assetNo = json['assetNo'] as String,
         publisher = json['publisher'] as String,
         rentYn = json['rentYn'] as String?,
-        rentUser = json['rentUser'] as String?,
-        seq = json['seq'] as BigInt?;
+        rentUser = json['rentUser'] as String?;
 
   /// domain -> json
   Map<String, dynamic> toJson() => {
+        'seq': seq,
         'bookNm': bookNm,
         'assetNo': assetNo,
         'publisher': publisher,
         'rentYn': rentYn,
         'rentUser': rentUser,
-        'seq': seq,
       };
+
+  /// 도서ID
+  int seq;
 
   /// 도서명
   String bookNm;
@@ -43,7 +46,4 @@ class Book {
 
   /// 대출 사용자
   String? rentUser;
-
-  /// 도서ID
-  BigInt? seq;
 }

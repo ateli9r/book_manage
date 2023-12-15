@@ -1,8 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:mocktail/mocktail.dart';
+
 import 'package:dart_frog/dart_frog.dart';
-import 'package:test/test.dart';
+import 'package:mocktail/mocktail.dart';
+
+const API_PROTO = 'http';
+const API_HOST = '192.168.0.146';
+const API_PORT = 8080;
+const API_REQ_HEAERS = {'Content-Type': 'application/json'};
 
 class LoginMockRequestContext extends Mock implements RequestContext {
   LoginMockRequestContext({required this.userId, required this.password});
@@ -13,10 +17,8 @@ class LoginMockRequestContext extends Mock implements RequestContext {
   @override
   Request get request => Request(
         'POST',
-        Uri(scheme: 'http', host: '192.168.0.146', port: 8080, path: '/login'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        Uri(scheme: API_PROTO, host: API_HOST, port: API_PORT, path: '/login'),
+        headers: API_REQ_HEAERS,
         body: jsonEncode({'userId': userId, 'password': password}),
       );
 }
@@ -29,10 +31,8 @@ class SearchMockRequestContext extends Mock implements RequestContext {
   @override
   Request get request => Request(
         'POST',
-        Uri(scheme: 'http', host: 'localhost', port: 8080, path: '/rent'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        Uri(scheme: API_PROTO, host: API_HOST, port: API_PORT, path: '/rent'),
+        headers: API_REQ_HEAERS,
         body: jsonEncode({'keyword': keyword}),
       );
 }
@@ -45,10 +45,8 @@ class ViewMockRequestContext extends Mock implements RequestContext {
   @override
   Request get request => Request(
         'POST',
-        Uri(scheme: 'http', host: 'localhost', port: 8080, path: '/view'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        Uri(scheme: API_PROTO, host: API_HOST, port: API_PORT, path: '/view'),
+        headers: API_REQ_HEAERS,
         body: jsonEncode({'assetNo': assetNo}),
       );
 }
@@ -67,10 +65,8 @@ class RentMockRequestContext extends Mock implements RequestContext {
   @override
   Request get request => Request(
         'POST',
-        Uri(scheme: 'http', host: '192.168.0.146', port: 8080, path: '/rent'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        Uri(scheme: API_PROTO, host: API_HOST, port: API_PORT, path: '/rent'),
+        headers: API_REQ_HEAERS,
         body: jsonEncode({
           'userId': userId,
           'assetNo': assetNo,
