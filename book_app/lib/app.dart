@@ -1,7 +1,8 @@
-import 'package:book_app/app/user.dart';
+import 'package:book_app/model/domain/user_domain.dart';
 import 'package:book_app/page/home.dart';
 import 'package:book_app/page/login.dart';
 import 'package:flutter/material.dart';
+import 'package:book_app/model/view/login_model.dart';
 
 class MyApp extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _MyAppState extends State<MyApp> {
 
   Widget routeHomeWidget() {
     if (userInfo == null) {
-      return LoginPageWidget(setUserInfo: setUserInfo);
+      return LoginPageWidget(setUserInfo: setUserInfo, viewModel: LoginModel());
     }
     return HomePageWidget();
   }

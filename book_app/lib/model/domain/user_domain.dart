@@ -1,10 +1,16 @@
 class UserInfo {
   UserInfo({
     required this.userId,
-    required this.UserNm,
+    required this.userNm,
     required this.deptCd,
   });
+
+  ///
   final String userId;
-  final String UserNm;
+
+  ///
+  final String userNm;
+
+  ///
   final String deptCd;
 }

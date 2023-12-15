@@ -1,28 +1,42 @@
-/// 도서 상세
-///
-/// 도서 이미지
-/// 제목
-/// 출판사
-/// 관리번호
-/// 구매일
-/// 대여가능 여부
-/// 대여 사용자
-///
-/// 대여하기 버튼
-/// 반납하기 버튼
-
-import 'package:book_app/app/book.dart';
+import 'package:book_app/model/domain/book_domain.dart';
 import 'package:flutter/material.dart';
+import 'package:book_app/model/view/book_list_model.dart';
+import 'package:book_app/model/view/book_rent_model.dart';
+import 'scan.dart';
 
 class BookDetailWidget extends StatefulWidget {
-  const BookDetailWidget({required this.book, super.key});
+  const BookDetailWidget({
+    required this.book,
+    required this.viewModel,
+    super.key,
+  });
+
   final Book book;
+  final BookRentModel viewModel;
 
   @override
   State<BookDetailWidget> createState() => _BookDetailWidgetState();
 }
 
 class _BookDetailWidgetState extends State<BookDetailWidget> {
+  // String _scanCode = '';
+  String _reqCode = '';
+
+  // String rentButtonLabel {
+  // }
+  bool get isAllowRent => (!(widget.book.rentUser != null &&
+      widget.book.rentUser!.isEmpty == false));
+
+  bool get isAllowReturn => (widget.book.rentYn == 'Y');
+
+  String get rentLabel => !isAllowReturn ? '도서대출' : '도서반납';
+
+  void updateRentBook(String scanCode) {
+    // setState(() {
+    //   scanCode = scanCode;
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,14 +62,12 @@ class _BookDetailWidgetState extends State<BookDetailWidget> {
             ],
           ),
           Text(
-            // '#도서명',
             widget.book.bookNm,
             style: const TextStyle(
               fontSize: 20,
             ),
           ),
           Text(
-            // '#출판사',
             widget.book.publisher,
             style: const TextStyle(
               fontSize: 14,
@@ -68,15 +80,21 @@ class _BookDetailWidgetState extends State<BookDetailWidget> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        child: (false)
-            ? Expanded(
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.qr_code),
-                  onPressed: () {
-                    print('tapped');
-                  },
-                  label: const Text((true) ? '도서대출' : '도서반납'),
-                ),
+        child: isAllowRent
+            ? ElevatedButton.icon(
+                icon: const Icon(Icons.qr_code),
+                onPressed: () {
+                  print('tapped');
+
+                  _reqCode = (!isAllowReturn) ? 'rent' : 'return';
+
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ScanPageWidget(setScanCode: updateRentBook)),
+                  );
+                },
+                label: Text(rentLabel),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -88,7 +106,9 @@ class _BookDetailWidgetState extends State<BookDetailWidget> {
                       color: Colors.red,
                     ),
                   ),
-                  Text('홍길동 (2023-12-06)'),
+                  // Text('홍길동 (2023-12-06)'),
+                  Text(widget.book.rentUser ?? '#'),
+                  Text(widget.book.rentYn ?? '#'),
                 ],
               ),
 

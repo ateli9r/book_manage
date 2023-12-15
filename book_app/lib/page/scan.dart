@@ -1,6 +1,3 @@
-/// 스캔 페이지
-///
-
 import 'package:flutter/material.dart';
 import 'package:qr_code_dart_scan/qr_code_dart_scan.dart';
 import 'package:audioplayers/audioplayers.dart';

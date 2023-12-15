@@ -43,14 +43,16 @@ class BookService {
     items?.forEach((item) {
       if (item.bookNm == null) return;
 
-      var book = Book(
-        seq: item.seq.toInt(),
-        bookNm: item.bookNm!,
-        assetNo: item.assetNo,
-        publisher: item.publisher ?? '',
+      ret.add(
+        Book(
+          seq: item.seq.toInt(),
+          bookNm: item.bookNm!,
+          assetNo: item.assetNo,
+          publisher: item.publisher ?? '',
+          rentYn: item.rentYn,
+          rentUser: item.rentUser,
+        ),
       );
-
-      ret.add(book);
     });
     return ret;
   }

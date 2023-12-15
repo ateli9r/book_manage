@@ -1,21 +1,19 @@
-/// 로그인 페이지
-///
-/// - [TextField] 아이디
-/// - [TextField] 패스워드
-/// - [Button] 로그인
-/// - [Link] 아이디/패스워드 찾기
-///
-///
-
 import 'package:book_app/app/book_service.dart';
 import 'package:book_app/app/common_util.dart';
-import 'package:book_app/app/user.dart';
+import 'package:book_app/model/domain/user_domain.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:book_app/model/view/login_model.dart';
 
 class LoginPageWidget extends StatefulWidget {
-  LoginPageWidget({required this.setUserInfo, super.key});
+  LoginPageWidget({
+    required this.setUserInfo,
+    required this.viewModel,
+    super.key,
+  });
+
+  LoginModel viewModel;
   Function setUserInfo;
 
   @override
@@ -36,7 +34,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
           // 로그인 폼
           Column(children: [
             Padding(
-              padding: EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
                   TextField(
@@ -53,7 +51,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
                   TextField(
@@ -100,7 +98,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
                   UserInfo data = UserInfo(
                     userId: _userId,
-                    UserNm: '#UserNm',
+                    userNm: '#UserNm',
                     deptCd: '#deptCd',
                   );
 

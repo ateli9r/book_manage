@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:book_app/app/book.dart';
+import 'package:book_app/model/domain/book_domain.dart';
 
 class BookDatabase {
   BookDatabase({required this.client});
@@ -53,9 +53,12 @@ class BookDatabase {
           final mapList = resp['data'] as List;
           ret.addAll(mapList.map((map) {
             return Book(
+              seq: map['seq'],
               assetNo: map['assetNo'],
               bookNm: map['bookNm'],
               publisher: map['publisher'],
+              rentYn: map['rentYn'],
+              rentUser: map['rentUser'],
             );
           }));
         }

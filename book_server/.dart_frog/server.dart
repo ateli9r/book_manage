@@ -15,7 +15,7 @@ import '../routes/util/print.dart' as util_print;
 
 
 void main() async {
-  final address = InternetAddress.anyIPv6;
+  final address = InternetAddress.tryParse('') ?? InternetAddress.anyIPv6;
   final port = int.tryParse(Platform.environment['PORT'] ?? '8080') ?? 8080;
   hotReload(() => createServer(address, port));
 }

@@ -9,7 +9,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:book_app/main.dart';
-import 'package:book_app/page/sample.dart';
+
+class SampleWidget extends StatelessWidget {
+  SampleWidget({
+    required this.title,
+    required this.message,
+    super.key,
+  });
+
+  final String title;
+  final String message;
+  int counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: Center(
+        child: Text(message),
+      ),
+    );
+  }
+}
 
 void main() {
   // testWidgets('Counter increments smoke test', (WidgetTester tester) async {
