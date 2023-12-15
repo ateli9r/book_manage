@@ -4,7 +4,8 @@ class CommonUtil {
   CommonUtil._privateConstructor();
   static final CommonUtil shared = CommonUtil._privateConstructor();
 
-  void showMessage(BuildContext context, String title, String text) {
+  void showMessage(BuildContext? context, String title, String text) {
+    if (context == null) return;
     showDialog(
       context: context,
       builder: (BuildContext context) {

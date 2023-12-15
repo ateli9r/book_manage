@@ -1,9 +1,4 @@
-import 'package:book_app/app/book_service.dart';
-import 'package:book_app/app/common_util.dart';
-import 'package:book_app/model/domain/user_domain.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:book_app/model/view/login_model.dart';
 
 class LoginPageWidget extends StatefulWidget {
@@ -21,12 +16,12 @@ class LoginPageWidget extends StatefulWidget {
 }
 
 class _LoginPageWidgetState extends State<LoginPageWidget> {
-  bool _isLoading = false;
-  String _userId = '';
-  String _password = '';
-
   @override
   Widget build(BuildContext context) {
+    widget.viewModel.context = context;
+    widget.viewModel.setState = setState;
+    widget.viewModel.setUserInfo = widget.setUserInfo;
+
     return Scaffold(
       appBar: AppBar(title: const Text('로그인')),
       body: Stack(
@@ -41,11 +36,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     decoration: const InputDecoration(
                       hintText: '아이디',
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        _userId = value;
-                      });
-                    },
+                    onChanged: widget.viewModel.onChangedUserId,
                   ),
                 ],
               ),
@@ -59,11 +50,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     decoration: const InputDecoration(
                       hintText: '비밀번호',
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        _password = value;
-                      });
-                    },
+                    onChanged: widget.viewModel.onChangedPassword,
                   ),
                 ],
               ),
@@ -71,45 +58,13 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: ElevatedButton(
-                onPressed: () async {
-                  if (_userId.isEmpty || _password.isEmpty) {
-                    CommonUtil.shared
-                        .showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
-                    return;
-                  }
-
-                  setState(() {
-                    _isLoading = true;
-                  });
-
-                  final service = BookService(client: http.Client());
-                  final respData = await service.login(_userId, _password)
-                      as Map<String, dynamic>;
-
-                  setState(() {
-                    _isLoading = false;
-                  });
-
-                  if (!respData['isSuccess']) {
-                    CommonUtil.shared
-                        .showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
-                    return;
-                  }
-
-                  UserInfo data = UserInfo(
-                    userId: _userId,
-                    userNm: '#UserNm',
-                    deptCd: '#deptCd',
-                  );
-
-                  widget.setUserInfo(data);
-                },
+                onPressed: widget.viewModel.onPressedLogin,
                 child: const Text('로그인'),
               ),
             ),
           ]),
           // 로딩 화면
-          (_isLoading)
+          (widget.viewModel.isLoading)
               ? Container(
                   decoration: BoxDecoration(
                     color: Colors.black38.withOpacity(0.3),
