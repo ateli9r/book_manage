@@ -3,6 +3,7 @@ import 'package:book_app/page/home.dart';
 import 'package:book_app/page/login.dart';
 import 'package:flutter/material.dart';
 import 'package:book_app/model/view/login_model.dart';
+import 'package:http/http.dart' as http;
 
 class MyApp extends StatefulWidget {
   @override
@@ -20,7 +21,9 @@ class _MyAppState extends State<MyApp> {
 
   Widget routeHomeWidget() {
     if (userInfo == null) {
-      return LoginPageWidget(setUserInfo: setUserInfo, viewModel: LoginModel());
+      return LoginPageWidget(
+          setUserInfo: setUserInfo,
+          viewModel: LoginModel(client: http.Client()));
     }
     return HomePageWidget();
   }

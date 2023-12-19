@@ -8,28 +8,22 @@ class BookDatabase {
   final http.Client client;
 
   Future<Map?> login({required String userId, required String password}) async {
-    final data = Future.sync(() async {
-      Map<String, Object> ret = {};
-      ret["isSuccess"] = false;
+    Map<String, Object> ret = {};
+    ret["isSuccess"] = false;
 
-      try {
-        final response = await client.post(
-          Uri.parse('http://192.168.0.146:8080/login'),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({'userId': userId, 'password': password}),
-        );
+    final response = await client.post(
+      Uri.parse('http://192.168.0.146:8080/login'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'userId': userId, 'password': password}),
+    );
 
-        final respData = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+    final respData = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
 
-        ret["isSuccess"] = respData['isSuccess'];
-      } finally {}
+    ret["isSuccess"] = respData['isSuccess'];
 
-      return ret;
-    });
-
-    return data;
+    return ret;
   }
 
   Future<List<Book>> search(String keyword) async {

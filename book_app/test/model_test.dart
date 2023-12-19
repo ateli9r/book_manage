@@ -1,37 +1,65 @@
 @TestOn('vm')
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:test/test.dart';
 import 'package:book_app/model/view/login_model.dart';
 import 'package:book_app/model/view/book_list_model.dart';
 import 'package:book_app/model/view/book_rent_model.dart';
+import 'package:mockito/mockito.dart';
+import 'package:http/http.dart' as http;
+
+class LoginMockClient extends Mock implements http.Client {
+  @override
+  Future<http.Response> post(Uri url,
+      {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
+    final reqData = jsonDecode(body as String) as Map;
+
+    Map? respBody;
+    if (reqData["userId"] == "wschoi" && reqData["password"] == "1111") {
+      respBody = {"isSuccess": true};
+    } else {
+      respBody = {"isSuccess": false};
+    }
+    return http.Response(jsonEncode(respBody), 200);
+  }
+}
 
 void main() {
   group('로그인 모델 테스트', () {
+    http.Client client = LoginMockClient();
     test('아이디/패스워드 미입력', () async {
-      final model = LoginModel();
-      model.onPressedLogin();
+      final model = LoginModel(client: client);
+
+      await Future.sync(() => {model.onPressedLogin()});
 
       expect(model.userInfo, isNull);
+      expect(model.status, LoginModelStatus.error);
     });
 
     test('로그인 실패', () async {
-      final model = LoginModel();
+      final model = LoginModel(client: client);
       model
         ..userId = 'not_found'
         ..password = '1234';
-      model.onPressedLogin();
+
+      await Future.sync(() => {model.onPressedLogin()});
 
       expect(model.userInfo, isNull);
+      expect(model.status, LoginModelStatus.error);
     });
 
     test('로그인 성공', () async {
-      final model = LoginModel();
+      final model = LoginModel(client: client);
       model
         ..userId = 'wschoi'
         ..password = '1111';
-      model.onPressedLogin();
+
+      await Future.sync(() => {model.onPressedLogin()});
 
       expect(model.userInfo, isNotNull);
+      expect(model.status, LoginModelStatus.ok);
     });
   });
 
