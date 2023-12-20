@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'scan.dart';
-import '../model/book_domain.dart';
-import '../view_model/book_list_model.dart';
-import '../view_model/book_rent_model.dart';
+import 'scan_view.dart';
+import '../model/book_model.dart';
+import '../vmodel/book_list_vmodel.dart';
+import '../vmodel/book_rent_vmodel.dart';
 
 class BookDetailWidget extends StatefulWidget {
   const BookDetailWidget({
@@ -11,8 +11,8 @@ class BookDetailWidget extends StatefulWidget {
     super.key,
   });
 
-  final Book book;
-  final BookRentModel viewModel;
+  final BookModel book;
+  final BookRentVModel viewModel;
 
   @override
   State<BookDetailWidget> createState() => _BookDetailWidgetState();

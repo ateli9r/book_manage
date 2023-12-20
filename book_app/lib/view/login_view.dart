@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../view_model/login_model.dart';
+import '../vmodel/login_vmodel.dart';
 
 class LoginPageWidget extends StatefulWidget {
   LoginPageWidget({
@@ -8,7 +8,7 @@ class LoginPageWidget extends StatefulWidget {
     super.key,
   });
 
-  LoginModel viewModel;
+  LoginVModel viewModel;
   Function setUserInfo;
 
   @override

@@ -1,5 +1,5 @@
-class Book {
-  Book({
+class BookModel {
+  BookModel({
     required this.seq,
     required this.bookNm,
     required this.assetNo,

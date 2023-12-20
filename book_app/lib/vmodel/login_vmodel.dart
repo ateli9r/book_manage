@@ -1,16 +1,16 @@
+import 'package:book_app/service/data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../service/book_service.dart';
-import '../model/user_domain.dart';
-import 'common_model.dart';
-import '../model/user_domain.dart';
+import '../model/user_model.dart';
+import 'common_vmodel.dart';
 
 enum LoginModelStatus { idle, error, ok }
 
-class LoginModel {
-  LoginModel({required this.client});
-  http.Client client;
+class LoginVModel {
+  LoginVModel({this.client});
+  http.Client? client;
 
+  LoginModelStatus status = LoginModelStatus.idle;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -20,7 +20,6 @@ class LoginModel {
 
   String userId = '';
   String password = '';
-  LoginModelStatus status = LoginModelStatus.idle;
   UserInfo? userInfo;
 
   void onChangedUserId(String value) {
@@ -33,7 +32,7 @@ class LoginModel {
 
   void onPressedLogin() async {
     if (userId.isEmpty || password.isEmpty) {
-      CommonModel.shared.showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
+      CommonVModel.shared.showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
       status = LoginModelStatus.error;
       return;
     }
@@ -44,9 +43,10 @@ class LoginModel {
       });
     }
 
-    final service = BookService(client: client);
-    final respData =
-        await service.login(userId, password) as Map<String, dynamic>;
+    final service =
+        DataService(client: (client != null) ? client! : http.Client());
+    final respData = await service.login(userId: userId, password: password)
+        as Map<String, dynamic>;
 
     if (setState != null) {
       setState!(() {
@@ -55,7 +55,7 @@ class LoginModel {
     }
 
     if (!respData['isSuccess']) {
-      CommonModel.shared.showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
+      CommonVModel.shared.showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
       status = LoginModelStatus.error;
       return;
     }

@@ -1,21 +1,22 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import '../model/book_domain.dart';
+import '../model/book_model.dart';
 
-class BookDatabase {
-  BookDatabase({required this.client});
+class DataService {
+  DataService({required this.client});
   final http.Client client;
+
+  final apiHost = 'http://192.168.0.146:8080';
+  final headers = {'Content-Type': 'application/json'};
 
   Future<Map?> login({required String userId, required String password}) async {
     Map<String, Object> ret = {};
     ret["isSuccess"] = false;
 
     final response = await client.post(
-      Uri.parse('http://192.168.0.146:8080/login'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      Uri.parse('$apiHost/login'),
+      headers: headers,
       body: jsonEncode({'userId': userId, 'password': password}),
     );
 
@@ -26,16 +27,14 @@ class BookDatabase {
     return ret;
   }
 
-  Future<List<Book>> search(String keyword) async {
+  Future<List<BookModel>> search(String keyword) async {
     final data = Future.sync(() async {
-      List<Book> ret = [];
+      List<BookModel> ret = [];
 
       try {
         final response = await client.post(
-          Uri.parse('http://192.168.0.146:8080/search'),
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          Uri.parse('$apiHost/search'),
+          headers: headers,
           body: jsonEncode({
             'keyword': keyword,
           }),
@@ -46,7 +45,7 @@ class BookDatabase {
         if (resp['isSuccess'] as bool == true) {
           final mapList = resp['data'] as List;
           ret.addAll(mapList.map((map) {
-            return Book(
+            return BookModel(
               seq: map['seq'],
               assetNo: map['assetNo'],
               bookNm: map['bookNm'],

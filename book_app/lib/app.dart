@@ -1,10 +1,10 @@
 // import 'package:book_app/model/user_domain.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'view/home.dart';
-import 'view/login.dart';
-import 'view_model/login_model.dart';
-import 'model/user_domain.dart';
+import 'view/home_view.dart';
+import 'view/login_view.dart';
+import 'vmodel/login_vmodel.dart';
+import 'model/user_model.dart';
 
 class MyApp extends StatefulWidget {
   @override
@@ -23,8 +23,7 @@ class _MyAppState extends State<MyApp> {
   Widget routeHomeWidget() {
     if (userInfo == null) {
       return LoginPageWidget(
-          setUserInfo: setUserInfo,
-          viewModel: LoginModel(client: http.Client()));
+          setUserInfo: setUserInfo, viewModel: LoginVModel());
     }
     return HomePageWidget();
   }

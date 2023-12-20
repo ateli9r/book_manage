@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../service/book_database.dart';
-import '../service/book_service.dart';
+import '../service/data_service.dart';
 
-import '../model/book_domain.dart';
-import '../view_model/book_rent_model.dart';
-import '../view/book_detail.dart';
-import '../view/book_list_item.dart';
+import '../model/book_model.dart';
+import '../vmodel/book_rent_vmodel.dart';
+import 'book_detail_view.dart';
+import 'book_list_item_view.dart';
 
-import '../view_model/book_list_model.dart';
-import '../view_model/book_rent_model.dart';
+import '../vmodel/book_list_vmodel.dart';
+import '../vmodel/book_rent_vmodel.dart';
 
-import 'scan.dart';
+import 'scan_view.dart';
 
 class BookListWidget extends StatefulWidget {
   const BookListWidget({
@@ -21,7 +20,7 @@ class BookListWidget extends StatefulWidget {
   });
 
   final http.Client httpClient;
-  final BookListModel viewModel;
+  final BookListVModel viewModel;
 
   @override
   State<BookListWidget> createState() => _BookListWidgetState();
@@ -32,8 +31,8 @@ class _BookListWidgetState extends State<BookListWidget> {
 
   final _keywordController = TextEditingController();
 
-  Future<List<Book>> getBookList() async {
-    final db = BookDatabase(client: widget.httpClient);
+  Future<List<BookModel>> getBookList() async {
+    final db = DataService(client: widget.httpClient);
     final data = await db.search(_keyword);
     return data;
   }
@@ -53,9 +52,6 @@ class _BookListWidgetState extends State<BookListWidget> {
       body: Column(
         children: [
           // 검색
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child:
           Column(
             children: [
               TextField(
@@ -75,44 +71,40 @@ class _BookListWidgetState extends State<BookListWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // Expanded(
-                  //   child:
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ScanPageWidget(setScanCode: setScanCode)),
-                      );
-                    },
-                    icon: const Icon(Icons.qr_code),
-                    label: const Text('QR스캔'),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ScanPageWidget(setScanCode: setScanCode)),
+                        );
+                      },
+                      icon: const Icon(Icons.qr_code),
+                      label: const Text('QR스캔'),
+                    ),
                   ),
-                  // ),
                   const SizedBox(width: 10),
-                  // Expanded(
-                  // child:
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      setScanCode('');
-                    },
-                    icon: const Icon(Icons.cleaning_services),
-                    label: const Text('초기화'),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        setScanCode('');
+                      },
+                      icon: const Icon(Icons.cleaning_services),
+                      label: const Text('초기화'),
+                    ),
                   ),
-                  // ),
                 ],
               ),
             ],
           ),
-          // ),
           // 도서 목록
-
           FutureBuilder(
             future: getBookList(),
-            builder:
-                (BuildContext context, AsyncSnapshot<List<Book>> snapshot) {
+            builder: (BuildContext context,
+                AsyncSnapshot<List<BookModel>> snapshot) {
               if (snapshot.hasData) {
-                final bookList = snapshot.data as List<Book>;
+                final bookList = snapshot.data as List<BookModel>;
 
                 return Expanded(
                   child: ListView.builder(
@@ -125,7 +117,7 @@ class _BookListWidgetState extends State<BookListWidget> {
                           publisher: bookList[index].publisher,
                         ),
                         onTap: () async {
-                          BookService(client: http.Client())
+                          DataService(client: http.Client())
                               .search(bookList[index].assetNo)
                               .then(
                                 (books) => {
@@ -133,7 +125,7 @@ class _BookListWidgetState extends State<BookListWidget> {
                                     MaterialPageRoute(
                                       builder: (context) => BookDetailWidget(
                                         book: books[0],
-                                        viewModel: BookRentModel(),
+                                        viewModel: BookRentVModel(),
                                       ),
                                     ),
                                   ),
