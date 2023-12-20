@@ -1,75 +1,65 @@
 import 'package:book_app/service/data_service.dart';
-import 'package:flutter/material.dart';
+import 'package:book_app/service/status_service.dart';
+import 'package:book_app/vmodel/base_vmodel.dart';
 import 'package:http/http.dart' as http;
 import '../model/user_model.dart';
 import 'common_vmodel.dart';
 
-enum LoginModelStatus { idle, error, ok }
-
-class LoginVModel {
-  LoginVModel({this.client});
-  http.Client? client;
-
-  LoginModelStatus status = LoginModelStatus.idle;
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-
-  BuildContext? context;
-  void Function(void Function() fn)? setState;
-  Function? setUserInfo;
+class LoginVModel extends BaseVModel {
+  LoginVModel({super.client});
 
   String userId = '';
   String password = '';
-  UserInfo? userInfo;
 
+  /// 아이디 입력
   void onChangedUserId(String value) {
     userId = value;
   }
 
+  /// 패스워드 입력
   void onChangedPassword(String value) {
     password = value;
   }
 
+  /// 로그인 버튼 클릭
   void onPressedLogin() async {
     if (userId.isEmpty || password.isEmpty) {
       CommonVModel.shared.showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
-      status = LoginModelStatus.error;
+      status = VModelStatus.error;
       return;
     }
 
     if (setState != null) {
       setState!(() {
-        _isLoading = true;
+        isLoading = true;
       });
     }
 
-    final service =
-        DataService(client: (client != null) ? client! : http.Client());
+    client ??= http.Client();
+    final service = DataService(client: client!);
     final respData = await service.login(userId: userId, password: password)
         as Map<String, dynamic>;
 
     if (setState != null) {
       setState!(() {
-        _isLoading = false;
+        isLoading = false;
       });
     }
 
     if (!respData['isSuccess']) {
       CommonVModel.shared.showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
-      status = LoginModelStatus.error;
+      status = VModelStatus.error;
       return;
     }
 
-    userInfo = UserInfo(
-      userId: userId,
-      userNm: '#UserNm',
-      deptCd: '#deptCd',
-    );
-
-    if (setUserInfo != null) {
-      setUserInfo!(userInfo);
+    if (StatusService.shared.setUserInfo != null) {
+      StatusService.shared.setUserInfo!(UserInfo(
+        userId: userId,
+        userNm: '#UserNm',
+        deptCd: '#deptCd',
+      ));
     }
 
-    status = LoginModelStatus.ok;
+    status = VModelStatus.finish;
   }
 }

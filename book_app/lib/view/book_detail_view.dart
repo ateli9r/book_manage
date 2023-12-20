@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'scan_view.dart';
 import '../model/book_model.dart';
-import '../vmodel/book_list_vmodel.dart';
-import '../vmodel/book_rent_vmodel.dart';
+import '../vmodel/book_rent_vmodel.dart';
 
 class BookDetailWidget extends StatefulWidget {
   const BookDetailWidget({

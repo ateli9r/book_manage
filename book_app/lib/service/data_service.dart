@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import '../model/book_model.dart';
 
@@ -31,31 +30,27 @@ class DataService {
     final data = Future.sync(() async {
       List<BookModel> ret = [];
 
-      try {
-        final response = await client.post(
-          Uri.parse('$apiHost/search'),
-          headers: headers,
-          body: jsonEncode({
-            'keyword': keyword,
-          }),
-        );
+      final response = await client.post(
+        Uri.parse('$apiHost/search'),
+        headers: headers,
+        body: jsonEncode({'keyword': keyword}),
+      );
 
-        final resp = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+      final resp = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
 
-        if (resp['isSuccess'] as bool == true) {
-          final mapList = resp['data'] as List;
-          ret.addAll(mapList.map((map) {
-            return BookModel(
-              seq: map['seq'],
-              assetNo: map['assetNo'],
-              bookNm: map['bookNm'],
-              publisher: map['publisher'],
-              rentYn: map['rentYn'],
-              rentUser: map['rentUser'],
-            );
-          }));
-        }
-      } finally {}
+      if (resp['isSuccess'] as bool == true) {
+        final mapList = resp['data'] as List;
+        ret.addAll(mapList.map((map) {
+          return BookModel(
+            seq: map['seq'],
+            assetNo: map['assetNo'],
+            bookNm: map['bookNm'],
+            publisher: map['publisher'],
+            rentYn: map['rentYn'],
+            rentUser: map['rentUser'],
+          );
+        }));
+      }
 
       return ret;
     });

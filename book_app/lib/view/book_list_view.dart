@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../service/data_service.dart';
-
 import '../model/book_model.dart';
-import '../vmodel/book_rent_vmodel.dart';
-import 'book_detail_view.dart';
+import '../vmodel/book_list_vmodel.dart';
 import 'book_list_item_view.dart';
-
-import '../vmodel/book_list_vmodel.dart';
-import '../vmodel/book_rent_vmodel.dart';
-
-import 'scan_view.dart';
 
 class BookListWidget extends StatefulWidget {
   const BookListWidget({
@@ -27,26 +19,10 @@ class BookListWidget extends StatefulWidget {
 }
 
 class _BookListWidgetState extends State<BookListWidget> {
-  String _keyword = '';
-
-  final _keywordController = TextEditingController();
-
-  Future<List<BookModel>> getBookList() async {
-    final db = DataService(client: widget.httpClient);
-    final data = await db.search(_keyword);
-    return data;
-  }
-
-  void setScanCode(String scanCode) {
-    setState(() {
-      _keyword = scanCode;
-    });
-
-    _keywordController.text = scanCode;
-  }
-
   @override
   Widget build(BuildContext context) {
+    widget.viewModel.initialize(context, setState);
+
     return Scaffold(
       appBar: AppBar(title: const Text('도서 목록')),
       body: Column(
@@ -55,7 +31,7 @@ class _BookListWidgetState extends State<BookListWidget> {
           Column(
             children: [
               TextField(
-                controller: _keywordController,
+                controller: widget.viewModel.keywordText,
                 decoration: const InputDecoration(
                   hintText: '책 제목, 관리번호',
                   border: InputBorder.none,
@@ -64,22 +40,14 @@ class _BookListWidgetState extends State<BookListWidget> {
                     child: Icon(Icons.search),
                   ),
                 ),
-                onChanged: (_) {
-                  setScanCode(_keywordController.text);
-                },
+                onChanged: widget.viewModel.onChangedKeyword,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ScanPageWidget(setScanCode: setScanCode)),
-                        );
-                      },
+                      onPressed: widget.viewModel.onPressedFindByQrcode,
                       icon: const Icon(Icons.qr_code),
                       label: const Text('QR스캔'),
                     ),
@@ -87,9 +55,7 @@ class _BookListWidgetState extends State<BookListWidget> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        setScanCode('');
-                      },
+                      onPressed: widget.viewModel.onPressedClearKeyword,
                       icon: const Icon(Icons.cleaning_services),
                       label: const Text('초기화'),
                     ),
@@ -100,7 +66,7 @@ class _BookListWidgetState extends State<BookListWidget> {
           ),
           // 도서 목록
           FutureBuilder(
-            future: getBookList(),
+            future: widget.viewModel.getBookList(),
             builder: (BuildContext context,
                 AsyncSnapshot<List<BookModel>> snapshot) {
               if (snapshot.hasData) {
@@ -117,20 +83,7 @@ class _BookListWidgetState extends State<BookListWidget> {
                           publisher: bookList[index].publisher,
                         ),
                         onTap: () async {
-                          DataService(client: http.Client())
-                              .search(bookList[index].assetNo)
-                              .then(
-                                (books) => {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => BookDetailWidget(
-                                        book: books[0],
-                                        viewModel: BookRentVModel(),
-                                      ),
-                                    ),
-                                  ),
-                                },
-                              );
+                          widget.viewModel.onTapItem(bookList[index].assetNo);
                         },
                       );
                     },

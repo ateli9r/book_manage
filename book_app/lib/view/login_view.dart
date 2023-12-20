@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import '../vmodel/login_vmodel.dart';
+import '../vmodel/login_vmodel.dart';
 
 class LoginPageWidget extends StatefulWidget {
   LoginPageWidget({
-    required this.setUserInfo,
     required this.viewModel,
     super.key,
   });
 
   LoginVModel viewModel;
-  Function setUserInfo;
 
   @override
   State<LoginPageWidget> createState() => _LoginPageWidgetState();
@@ -18,9 +16,7 @@ class LoginPageWidget extends StatefulWidget {
 class _LoginPageWidgetState extends State<LoginPageWidget> {
   @override
   Widget build(BuildContext context) {
-    widget.viewModel.context = context;
-    widget.viewModel.setState = setState;
-    widget.viewModel.setUserInfo = widget.setUserInfo;
+    widget.viewModel.initialize(context, setState);
 
     return Scaffold(
       appBar: AppBar(title: const Text('로그인')),

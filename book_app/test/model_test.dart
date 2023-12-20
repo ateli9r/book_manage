@@ -1,13 +1,12 @@
 @TestOn('vm')
 
-import 'dart:convert';
+import 'package:book_app/vmodel/base_vmodel.dart';
 import 'package:test/test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
 import '_mock.dart';
-import 'package:book_app/%08vmodel/login_vmodel.dart';
-import 'package:book_app/%08vmodel/book_list_vmodel.dart';
-import 'package:book_app/%08vmodel/book_rent_vmodel.dart';
+import 'package:book_app/vmodel/login_vmodel.dart';
+import 'package:book_app/vmodel/book_list_vmodel.dart';
+import 'package:book_app/vmodel/book_rent_vmodel.dart';
 
 void main() {
   group('로그인 모델 테스트', () {
@@ -18,8 +17,7 @@ void main() {
 
       await Future.sync(() => {model.onPressedLogin()});
 
-      expect(model.userInfo, isNull);
-      expect(model.status, LoginModelStatus.error);
+      expect(model.status, VModelStatus.error);
     });
 
     test('로그인 실패', () async {
@@ -30,8 +28,7 @@ void main() {
 
       await Future.sync(() => {model.onPressedLogin()});
 
-      expect(model.userInfo, isNull);
-      expect(model.status, LoginModelStatus.error);
+      expect(model.status, VModelStatus.error);
     });
 
     test('로그인 성공', () async {
@@ -42,8 +39,7 @@ void main() {
 
       await Future.sync(() => {model.onPressedLogin()});
 
-      expect(model.userInfo, isNotNull);
-      expect(model.status, LoginModelStatus.ok);
+      expect(model.status, VModelStatus.finish);
     });
   });
 

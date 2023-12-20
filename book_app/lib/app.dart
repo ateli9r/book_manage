@@ -1,9 +1,8 @@
-// import 'package:book_app/model/user_domain.dart';
+import 'package:book_app/service/status_service.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'view/home_view.dart';
 import 'view/login_view.dart';
-import 'vmodel/login_vmodel.dart';
+import 'vmodel/login_vmodel.dart';
 import 'model/user_model.dart';
 
 class MyApp extends StatefulWidget {
@@ -22,14 +21,15 @@ class _MyAppState extends State<MyApp> {
 
   Widget routeHomeWidget() {
     if (userInfo == null) {
-      return LoginPageWidget(
-          setUserInfo: setUserInfo, viewModel: LoginVModel());
+      return LoginPageWidget(viewModel: LoginVModel());
     }
     return HomePageWidget();
   }
 
   @override
   Widget build(BuildContext context) {
+    StatusService.shared.setUserInfo = setUserInfo;
+
     return MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
