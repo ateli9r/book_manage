@@ -1,8 +1,5 @@
-import 'package:book_app/service/data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../model/user_model.dart';
-import 'common_vmodel.dart';
 
 /// 기본 VModel
 class BaseVModel {

@@ -1,7 +1,6 @@
 import 'package:book_app/service/data_service.dart';
 import 'package:book_app/service/status_service.dart';
 import 'package:book_app/vmodel/base_vmodel.dart';
-import 'package:http/http.dart' as http;
 import '../model/user_model.dart';
 import 'common_vmodel.dart';
 
@@ -35,8 +34,7 @@ class LoginVModel extends BaseVModel {
       });
     }
 
-    client ??= http.Client();
-    final service = DataService(client: client!);
+    final service = DataService(client: client);
     final respData = await service.login(userId: userId, password: password)
         as Map<String, dynamic>;
 

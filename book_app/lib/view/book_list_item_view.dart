@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BookListItem extends StatelessWidget {
-  BookListItem({
+  const BookListItem({
     required this.bookNm,
     required this.assetNo,
     required this.publisher,

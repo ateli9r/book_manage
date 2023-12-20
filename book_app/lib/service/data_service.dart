@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 import '../model/book_model.dart';
 
 class DataService {
-  DataService({required this.client});
-  final http.Client client;
+  DataService({this.client});
+  http.Client? client;
 
   final apiHost = 'http://192.168.0.146:8080';
   final headers = {'Content-Type': 'application/json'};
@@ -13,7 +13,9 @@ class DataService {
     Map<String, Object> ret = {};
     ret["isSuccess"] = false;
 
-    final response = await client.post(
+    client ??= http.Client();
+
+    final response = await client!.post(
       Uri.parse('$apiHost/login'),
       headers: headers,
       body: jsonEncode({'userId': userId, 'password': password}),
@@ -30,7 +32,9 @@ class DataService {
     final data = Future.sync(() async {
       List<BookModel> ret = [];
 
-      final response = await client.post(
+      client ??= http.Client();
+
+      final response = await client!.post(
         Uri.parse('$apiHost/search'),
         headers: headers,
         body: jsonEncode({'keyword': keyword}),
