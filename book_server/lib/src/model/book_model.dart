@@ -1,7 +1,7 @@
 /// 도서 도메인
-class Book {
+class BookModel {
   /// 생성자
-  Book({
+  BookModel({
     required this.seq,
     required this.bookNm,
     required this.assetNo,
@@ -11,7 +11,7 @@ class Book {
   });
 
   /// json -> domain
-  Book.fromJson(Map<String, dynamic> json)
+  BookModel.fromJson(Map<String, dynamic> json)
       : seq = json['seq'] as int,
         bookNm = json['bookNm'] as String,
         assetNo = json['assetNo'] as String,

@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:book_server/src/app/book_database.dart';
-import 'package:book_server/src/app/book_domain.dart';
+import 'package:book_server/src/model/book_model.dart';
+import 'package:book_server/src/service/data_controller.dart';
 import 'package:crypto/crypto.dart';
 
-/// 도서 서비스
-class BookService {
+/// 데이터 서비스
+class DataService {
   /// 생성자
-  factory BookService() {
+  factory DataService() {
     return _instance;
   }
 
-  BookService._privateConstructor();
-  static final BookService _instance = BookService._privateConstructor();
+  DataService._privateConstructor();
+  static final DataService _instance = DataService._privateConstructor();
 
   /// 비밀번호 해시 생성
   String encryptPassword(String userId, String password) {
@@ -30,21 +30,21 @@ class BookService {
   /// 로그인
   Future<bool> signIn(String userId, String password) async {
     final passwordHash = encryptPassword(userId, password);
-    final items = await BookDatabase().findMngrSignIn(userId, passwordHash);
+    final items = await DataController().findMngrSignIn(userId, passwordHash);
 
     return items != null && items.length == 1;
   }
 
   /// 도서 목록 조회
-  Future<List<Book>> search(String keyword) async {
-    final ret = <Book>[];
-    final items = await BookDatabase().findBookAsset(keyword);
+  Future<List<BookModel>> search(String keyword) async {
+    final ret = <BookModel>[];
+    final items = await DataController().findBookAsset(keyword);
 
     items?.forEach((item) {
       if (item.bookNm == null) return;
 
       ret.add(
-        Book(
+        BookModel(
           seq: item.seq.toInt(),
           bookNm: item.bookNm!,
           assetNo: item.assetNo,
@@ -58,13 +58,13 @@ class BookService {
   }
 
   /// 도서 상세 조회
-  Future<Book?> detail(String assetNo) async {
-    final items = await BookDatabase().findBookAsset(assetNo);
+  Future<BookModel?> detail(String assetNo) async {
+    final items = await DataController().findBookAsset(assetNo);
     if (items == null) return null;
     if (items.isEmpty) return null;
 
     final item = items[0];
-    return Book(
+    return BookModel(
       seq: item.seq.toInt(),
       bookNm: item.bookNm!,
       assetNo: item.assetNo,
@@ -75,7 +75,7 @@ class BookService {
   }
 
   /// 도서 대출/반납
-  Future<bool> rent(Book book) async {
-    return BookDatabase().updateBookRent(book);
+  Future<bool> rent(BookModel book) async {
+    return DataController().updateBookRent(book);
   }
 }

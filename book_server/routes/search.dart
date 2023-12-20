@@ -1,5 +1,5 @@
 import 'package:dart_frog/dart_frog.dart';
-import 'package:book_server/src/app/book_service.dart';
+import 'package:book_server/src/service/data_service.dart';
 
 Future<Response> onRequest(RequestContext context) async {
   final ret = <String, dynamic>{};
@@ -14,7 +14,7 @@ Future<Response> onRequest(RequestContext context) async {
     var keyword = body['keyword'] as String?;
     keyword ??= '';
 
-    final service = BookService();
+    final service = DataService();
     final items = await service.search(keyword);
     final data = items.map((item) => item.toJson()).toList();
 

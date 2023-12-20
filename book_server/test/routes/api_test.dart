@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:book_server/src/app/book_domain.dart';
+import 'package:book_server/src/model/book_model.dart';
 import 'package:test/test.dart';
 
 import '../../routes/login.dart' as route_login;
@@ -148,7 +148,8 @@ void main() {
           expect(respData['isSuccess'], equals(true));
           expect(respData['data'], isNotNull);
 
-          final book = Book.fromJson(respData['data'] as Map<String, dynamic>);
+          final book =
+              BookModel.fromJson(respData['data'] as Map<String, dynamic>);
           expect(book.rentUser, anyOf([isNull, isEmpty]));
 
           testStep++;
@@ -213,7 +214,8 @@ void main() {
           expect(respData['isSuccess'], equals(true));
           expect(respData['data'], isNotNull);
 
-          final book = Book.fromJson(respData['data'] as Map<String, dynamic>);
+          final book =
+              BookModel.fromJson(respData['data'] as Map<String, dynamic>);
           expect(book.rentUser, anyOf([isNull, isEmpty]));
 
           testStep++;

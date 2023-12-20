@@ -1,4 +1,4 @@
-import 'package:book_server/src/app/book_service.dart';
+import 'package:book_server/src/service/data_service.dart';
 import 'package:dart_frog/dart_frog.dart';
 
 Future<Response> onRequest(RequestContext context) async {
@@ -12,7 +12,7 @@ Future<Response> onRequest(RequestContext context) async {
     final body = await request.json();
 
     final assetNo = body['assetNo'] as String;
-    final data = await BookService().detail(assetNo);
+    final data = await DataService().detail(assetNo);
 
     if (data != null) {
       ret['isSuccess'] = true;

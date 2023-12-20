@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:barcode_image/barcode_image.dart';
-import 'package:book_server/src/app/book_domain.dart';
-import 'package:book_server/src/app/book_service.dart';
+import 'package:book_server/src/model/book_model.dart';
+import 'package:book_server/src/service/data_service.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:image/image.dart';
 import 'package:pdf/pdf.dart';
@@ -32,7 +32,7 @@ void createQrCodeImage({
   File(path).writeAsBytesSync(encodePng(image));
 }
 
-Future<pw.Page> buildPage(List<Book> listBook) async {
+Future<pw.Page> buildPage(List<BookModel> listBook) async {
   const szImage = 80.0;
   const szBox = 150.0;
   const szFontAssetNo = 8.0;
@@ -133,10 +133,10 @@ Future<pw.Page> buildPage(List<Book> listBook) async {
 }
 
 Future<String> buildPrint() async {
-  List<Book> buffer = [];
+  List<BookModel> buffer = [];
 
   final pdf = pw.Document();
-  final service = BookService();
+  final service = DataService();
 
   final items = (await service.search('')).where((item) {
     return item.assetNo.startsWith('연구소'); // 관리번호 '연구소'로 시작하는 도서만 필터
@@ -144,7 +144,7 @@ Future<String> buildPrint() async {
 
   // 도서코드 14개씩 잘라서 문서 생성
   for (var i = 0; i < items.length; i++) {
-    Book book = items[i];
+    BookModel book = items[i];
     buffer.add(book);
 
     createQrCodeImage(

@@ -1,16 +1,16 @@
-import 'package:book_server/src/app/book_domain.dart';
 import 'package:book_server/src/generated/prisma/prisma_client.dart';
+import 'package:book_server/src/model/book_model.dart';
 import 'package:orm/logger.dart';
 
-/// 도서 데이터베이스
-class BookDatabase {
+/// 데이터 컨트롤러
+class DataController {
   /// 생성자
-  factory BookDatabase() {
+  factory DataController() {
     return _instance;
   }
 
-  BookDatabase._privateConstructor();
-  static final BookDatabase _instance = BookDatabase._privateConstructor();
+  DataController._privateConstructor();
+  static final DataController _instance = DataController._privateConstructor();
 
   /// 초기화 여부
   bool isInit = false;
@@ -95,7 +95,7 @@ class BookDatabase {
   }
 
   /// 도서 대출/반납
-  Future<bool> updateBookRent(Book book) async {
+  Future<bool> updateBookRent(BookModel book) async {
     if (prisma == null) initDatasource();
 
     final data = await prisma?.bookAssetTbl.update(

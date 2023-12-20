@@ -1,4 +1,4 @@
-import 'package:book_server/src/app/book_service.dart';
+import 'package:book_server/src/service/data_service.dart';
 import 'package:dart_frog/dart_frog.dart';
 
 Future<Response> onRequest(RequestContext context) async {
@@ -14,7 +14,7 @@ Future<Response> onRequest(RequestContext context) async {
     final assetNo = body['assetNo'] as String;
     final reqCode = body['reqCode'] as String;
 
-    final book = await BookService().detail(assetNo);
+    final book = await DataService().detail(assetNo);
     if (book == null) return Response.json(body: ret);
 
     if (reqCode == 'rent') {
@@ -24,7 +24,7 @@ Future<Response> onRequest(RequestContext context) async {
           ..rentYn = 'Y'
           ..rentUser = userId;
 
-        ret['isSuccess'] = await BookService().rent(book);
+        ret['isSuccess'] = await DataService().rent(book);
       }
     } else if (reqCode == 'return') {
       // 대출하지 않은 책은 반납 할 수 없음
@@ -33,7 +33,7 @@ Future<Response> onRequest(RequestContext context) async {
           ..rentYn = 'N'
           ..rentUser = '';
 
-        ret['isSuccess'] = await BookService().rent(book);
+        ret['isSuccess'] = await DataService().rent(book);
       }
     }
   }
