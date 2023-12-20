@@ -1,8 +1,9 @@
-import 'package:book_app/app/book_service.dart';
-import 'package:book_app/app/common_util.dart';
-import 'package:book_app/model/domain/user_domain.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../service/book_service.dart';
+import '../model/user_domain.dart';
+import 'common_model.dart';
+import '../model/user_domain.dart';
 
 enum LoginModelStatus { idle, error, ok }
 
@@ -32,7 +33,7 @@ class LoginModel {
 
   void onPressedLogin() async {
     if (userId.isEmpty || password.isEmpty) {
-      CommonUtil.shared.showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
+      CommonModel.shared.showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
       status = LoginModelStatus.error;
       return;
     }
@@ -54,7 +55,7 @@ class LoginModel {
     }
 
     if (!respData['isSuccess']) {
-      CommonUtil.shared.showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
+      CommonModel.shared.showMessage(context, "로그인 실패", "아이디 또는 패스워드를 확인하세요.");
       status = LoginModelStatus.error;
       return;
     }

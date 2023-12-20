@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:book_app/model/view/login_model.dart';
+import '../view_model/login_model.dart';
 
 class LoginPageWidget extends StatefulWidget {
   LoginPageWidget({

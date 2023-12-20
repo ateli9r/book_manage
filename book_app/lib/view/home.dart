@@ -1,7 +1,7 @@
-import 'package:book_app/page/book_list.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:book_app/model/view/book_list_model.dart';
+import '../view_model/book_list_model.dart';
+import 'book_list.dart';
 
 class HomePageWidget extends StatelessWidget {
   @override

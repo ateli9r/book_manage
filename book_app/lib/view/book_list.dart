@@ -1,13 +1,16 @@
-import 'package:book_app/model/domain/book_domain.dart';
-import 'package:book_app/app/book_database.dart';
-import 'package:book_app/app/book_service.dart';
-import 'package:book_app/model/view/book_rent_model.dart';
-import 'package:book_app/page/book_detail.dart';
-import 'package:book_app/page/book_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:book_app/model/view/book_list_model.dart';
-import 'package:book_app/model/view/book_rent_model.dart';
+import '../service/book_database.dart';
+import '../service/book_service.dart';
+
+import '../model/book_domain.dart';
+import '../view_model/book_rent_model.dart';
+import '../view/book_detail.dart';
+import '../view/book_list_item.dart';
+
+import '../view_model/book_list_model.dart';
+import '../view_model/book_rent_model.dart';
+
 import 'scan.dart';
 
 class BookListWidget extends StatefulWidget {

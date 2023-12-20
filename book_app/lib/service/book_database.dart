@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:book_app/model/domain/book_domain.dart';
+import '../model/book_domain.dart';
 
 class BookDatabase {
   BookDatabase({required this.client});

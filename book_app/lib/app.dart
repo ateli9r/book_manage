@@ -1,9 +1,10 @@
-import 'package:book_app/model/domain/user_domain.dart';
-import 'package:book_app/page/home.dart';
-import 'package:book_app/page/login.dart';
+// import 'package:book_app/model/user_domain.dart';
 import 'package:flutter/material.dart';
-import 'package:book_app/model/view/login_model.dart';
 import 'package:http/http.dart' as http;
+import 'view/home.dart';
+import 'view/login.dart';
+import 'view_model/login_model.dart';
+import 'model/user_domain.dart';
 
 class MyApp extends StatefulWidget {
   @override

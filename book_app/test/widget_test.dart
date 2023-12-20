@@ -7,8 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:book_app/main.dart';
+import '../lib/main.dart';
 
 class SampleWidget extends StatelessWidget {
   SampleWidget({

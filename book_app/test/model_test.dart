@@ -4,11 +4,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:book_app/model/view/login_model.dart';
-import 'package:book_app/model/view/book_list_model.dart';
-import 'package:book_app/model/view/book_rent_model.dart';
 import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
+import '../lib/view_model/login_model.dart';
+import '../lib/view_model/book_list_model.dart';
+import '../lib/view_model/book_rent_model.dart';
 
 class LoginMockClient extends Mock implements http.Client {
   @override

@@ -1,6 +1,6 @@
-import 'package:book_app/app/book_database.dart';
+import 'book_database.dart';
 
-import '../model/domain/book_domain.dart';
+import '../model/book_domain.dart';
 import 'package:http/http.dart' as http;
 
 class BookService {

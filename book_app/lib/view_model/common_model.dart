@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class CommonUtil {
-  CommonUtil._privateConstructor();
-  static final CommonUtil shared = CommonUtil._privateConstructor();
+class CommonModel {
+  CommonModel._privateConstructor();
+  static final CommonModel shared = CommonModel._privateConstructor();
 
   void showMessage(BuildContext? context, String title, String text) {
     if (context == null) return;
