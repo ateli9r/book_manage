@@ -28,6 +28,9 @@ enum VModelStatus {
   /// 에러
   error,
 
+  /// 위젯 push
+  push,
+
   /// 처리완료
   finish,
 }

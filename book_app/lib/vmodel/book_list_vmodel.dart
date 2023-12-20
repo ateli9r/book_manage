@@ -18,9 +18,12 @@ class BookListVModel extends BaseVModel {
       setState!(() {
         keyword = text;
       });
+    } else {
+      keyword = text;
     }
-
     keywordText.text = text;
+
+    status = VModelStatus.idle;
   }
 
   /// 도서 목록 조회
@@ -37,10 +40,13 @@ class BookListVModel extends BaseVModel {
 
   /// QR스캔
   void onPressedFindByQrcode() {
-    Navigator.of(context!).push(
-      MaterialPageRoute(
-          builder: (context) => ScanPageWidget(setScanCode: setKeyword)),
-    );
+    if (context != null) {
+      Navigator.of(context!).push(
+        MaterialPageRoute(
+            builder: (context) => ScanPageWidget(setScanCode: setKeyword)),
+      );
+    }
+    status = VModelStatus.push;
   }
 
   /// 초기화

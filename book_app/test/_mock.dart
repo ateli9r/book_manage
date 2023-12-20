@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,7 +15,9 @@ class LoginMockClient extends Mock implements http.Client {
     } else {
       respBody = {"isSuccess": false};
     }
-    return http.Response(jsonEncode(respBody), 200);
+    return http.Response(jsonEncode(respBody), 200, headers: {
+      HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'
+    });
   }
 }
 
@@ -34,75 +37,77 @@ class BookListMockClient extends Mock implements http.Client {
         "data": [
           {
             "seq": 1,
-            "bookNm": "도서명#1",
-            "assetNo": "관리번호#1",
-            "publisher": "출판사#1",
+            "bookNm": "book_name#1",
+            "assetNo": "asset_no#1",
+            "publisher": "publisher#1",
           },
           {
             "seq": 2,
-            "bookNm": "도서명#2",
-            "assetNo": "관리번호#2",
-            "publisher": "출판사#2",
+            "bookNm": "book_name#2",
+            "assetNo": "asset_no#2",
+            "publisher": "publisher#2",
           },
           {
             "seq": 3,
-            "bookNm": "도서명#3",
-            "assetNo": "관리번호#3",
-            "publisher": "출판사#3",
+            "bookNm": "book_name#3",
+            "assetNo": "asset_no#3",
+            "publisher": "publisher#3",
           },
           {
             "seq": 4,
-            "bookNm": "도서명#4",
-            "assetNo": "관리번호#4",
-            "publisher": "출판사#4",
+            "bookNm": "book_name#4",
+            "assetNo": "asset_no#4",
+            "publisher": "publisher#4",
           },
           {
             "seq": 5,
-            "bookNm": "도서명#5",
-            "assetNo": "관리번호#5",
-            "publisher": "출판사#5",
+            "bookNm": "book_name#5",
+            "assetNo": "asset_no#5",
+            "publisher": "publisher#5",
           },
         ],
       };
-    } else if (keyword == "키워드") {
+    } else if (keyword == "keyword") {
       respBody = {
         "isSuccess": true,
         "data": [
           {
             "seq": 1,
-            "bookNm": "키워드#1",
-            "assetNo": "관리번호#1",
-            "publisher": "출판사#1",
+            "bookNm": "keyword#1",
+            "assetNo": "asset_no#1",
+            "publisher": "publisher#1",
           },
           {
             "seq": 2,
-            "bookNm": "키워드#2",
-            "assetNo": "관리번호#2",
-            "publisher": "출판사#2",
+            "bookNm": "keyword#2",
+            "assetNo": "asset_no#2",
+            "publisher": "publisher#2",
           },
           {
             "seq": 3,
-            "bookNm": "키워드#3",
-            "assetNo": "관리번호#3",
-            "publisher": "출판사#3",
+            "bookNm": "keyword#3",
+            "assetNo": "asset_no#3",
+            "publisher": "publisher#3",
           },
         ],
       };
-    } else if (keyword == "연구소-B-0249") {
+    } else if (keyword == "asset_no") {
       respBody = {
         "isSuccess": true,
         "data": [
           {
             "seq": 1,
-            "bookNm": "관리번호 도서 검색",
-            "assetNo": "연구소-B-0249",
-            "publisher": "출판사",
+            "bookNm": "book_name",
+            "assetNo": "asset_no",
+            "publisher": "publisher",
           },
         ],
       };
     }
 
-    return http.Response(jsonEncode(respBody), 200);
+    return http.Response(jsonEncode(respBody), 200, headers: {
+      HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'
+    });
   }
 }
 
@@ -138,6 +143,8 @@ class BookRentMockClient extends Mock implements http.Client {
       }
     }
 
-    return http.Response(jsonEncode(respBody), 200);
+    return http.Response(jsonEncode(respBody), 200, headers: {
+      HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8'
+    });
   }
 }

@@ -46,22 +46,46 @@ void main() {
   group('도서 조회 모델 테스트', () {
     http.Client client = BookListMockClient();
 
+    test('QR스캔후 키워드 설정시 상태 변경', () async {
+      final model = BookListVModel(client: client);
+      model.onPressedFindByQrcode();
+      expect(model.status, equals(VModelStatus.push));
+
+      await Future.delayed(const Duration(seconds: 1))
+          .then((_) => {model.setKeyword('scan_code')});
+
+      expect(model.status, equals(VModelStatus.idle));
+    });
+
+    test('초기화 버튼을 누르면 keyword 초기화', () async {
+      final model = BookListVModel(client: client);
+      model.keyword = 'init_keyword';
+      model.onPressedClearKeyword();
+      expect(model.keyword.length, equals(0));
+    });
+
     test('도서 전체 조회', () async {
       final model = BookListVModel(client: client);
+      model.onChangedKeyword('');
 
-      throw Exception('no impl');
+      final data = await model.getBookList();
+      expect(data.length, greaterThanOrEqualTo(5));
     });
 
     test('도서 키워드 조회', () async {
       final model = BookListVModel(client: client);
+      model.onChangedKeyword('keyword');
 
-      throw Exception('no impl');
+      final data = await model.getBookList();
+      expect(data.length, greaterThanOrEqualTo(3));
     });
 
     test('도서 관리번호 조회', () async {
       final model = BookListVModel(client: client);
+      model.onChangedKeyword('asset_no');
 
-      throw Exception('no impl');
+      final data = await model.getBookList();
+      expect(data.length, equals(1));
     });
   });
 
