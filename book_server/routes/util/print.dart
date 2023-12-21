@@ -132,13 +132,21 @@ Future<pw.Page> buildPage(List<BookModel> listBook) async {
   );
 }
 
-Future<String> buildPrint() async {
+Future<String> buildPrint(List<String>? assetNoList) async {
   List<BookModel> buffer = [];
 
   final pdf = pw.Document();
   final service = DataService();
 
+  var targets = '';
+  if (assetNoList != null && assetNoList.isNotEmpty) {
+    targets = assetNoList.join('|');
+  }
+
   final items = (await service.search('')).where((item) {
+    if (targets.isNotEmpty) {
+      return targets.contains(item.assetNo);
+    }
     return item.assetNo.startsWith('연구소'); // 관리번호 '연구소'로 시작하는 도서만 필터
   }).toList();
 
@@ -172,6 +180,25 @@ Future<String> buildPrint() async {
 }
 
 Future<Response> onRequest(RequestContext context) async {
-  final uri = (await buildPrint()).replaceAll(RegExp('public/'), '/');
+  final request = context.request;
+
+  List<String>? assetNoList;
+
+  if (request.method.value == 'POST' &&
+      request.headers['Content-Type']!.startsWith('application/json')) {
+    final body = await request.json() as Map<String, dynamic>;
+    if (body['assetNoList'] != null) {
+      assetNoList = [];
+
+      final list = body['assetNoList'] as List<dynamic>;
+      for (final item in list) {
+        final assetNo = item as String;
+        assetNoList.add(assetNo);
+      }
+    }
+  }
+
+  final uri =
+      (await buildPrint(assetNoList)).replaceAll(RegExp('public/'), '/');
   return Response.movedPermanently(location: uri);
 }
