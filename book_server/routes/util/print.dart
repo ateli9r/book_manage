@@ -132,8 +132,11 @@ Future<pw.Page> buildPage(List<BookModel> listBook) async {
   );
 }
 
-Future<String> buildPrint(List<String>? assetNoList) async {
-  List<BookModel> buffer = [];
+Future<String> buildPrint(
+  String assetNoStart,
+  List<String>? assetNoList,
+) async {
+  final buffer = <BookModel>[];
 
   final pdf = pw.Document();
   final service = DataService();
@@ -147,12 +150,13 @@ Future<String> buildPrint(List<String>? assetNoList) async {
     if (targets.isNotEmpty) {
       return targets.contains(item.assetNo);
     }
-    return item.assetNo.startsWith('연구소'); // 관리번호 '연구소'로 시작하는 도서만 필터
+    return item.assetNo
+        .startsWith(assetNoStart); // 관리번호 startsWith로 시작하는 도서만 필터
   }).toList();
 
   // 도서코드 14개씩 잘라서 문서 생성
   for (var i = 0; i < items.length; i++) {
-    BookModel book = items[i];
+    final book = items[i];
     buffer.add(book);
 
     createQrCodeImage(
@@ -167,7 +171,7 @@ Future<String> buildPrint(List<String>? assetNoList) async {
   }
 
   // 버퍼에 남은 코드가 있다면 다시 요청
-  if (buffer.length > 0) {
+  if (buffer.isNotEmpty) {
     pdf.addPage(await buildPage(buffer));
   }
 
@@ -182,11 +186,19 @@ Future<String> buildPrint(List<String>? assetNoList) async {
 Future<Response> onRequest(RequestContext context) async {
   final request = context.request;
 
+  var assetNoStart = '';
   List<String>? assetNoList;
 
   if (request.method.value == 'POST' &&
       request.headers['Content-Type']!.startsWith('application/json')) {
     final body = await request.json() as Map<String, dynamic>;
+
+    if (body['startsWith'] != null && body['startsWith'] is String) {
+      assetNoStart = body['startsWith'] as String;
+    }
+    if (assetNoStart.isEmpty) {
+      assetNoStart = '연구소';
+    }
     if (body['assetNoList'] != null) {
       assetNoList = [];
 
@@ -198,7 +210,7 @@ Future<Response> onRequest(RequestContext context) async {
     }
   }
 
-  final uri =
-      (await buildPrint(assetNoList)).replaceAll(RegExp('public/'), '/');
+  final uri = (await buildPrint(assetNoStart, assetNoList))
+      .replaceAll(RegExp('public/'), '/');
   return Response.movedPermanently(location: uri);
 }
