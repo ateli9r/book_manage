@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:book_server/src/generated/prisma/prisma_client.dart';
 import 'package:book_server/src/model/book_model.dart';
+import 'package:book_server/src/model/dbinfo_model.dart';
 import 'package:orm/logger.dart';
 
 /// 데이터 컨트롤러
@@ -18,9 +21,18 @@ class DataController {
   /// DB 핸들러
   PrismaClient? prisma;
 
-  /// DB 접속정보 세팅
+  /// DB 접속정보
+  String? connString;
+
+  /// 시스템 환경변수로 DB 접속정보 초기화
   String readConnString() {
-    return 'mysql://test:test1234@192.168.0.151:3306/groupware?allowPublicKeyRetrieval=true';
+    return DBInfoModel(
+      dbUser: Platform.environment['BOOK_MANAGE_DB_USER'] ?? 'test',
+      dbPassword: Platform.environment['BOOK_MANAGE_DB_PASS'] ?? 'test1234',
+      dbHost: Platform.environment['BOOK_MANAGE_DB_HOST'] ?? '192.168.0.151',
+      dbPort: Platform.environment['BOOK_MANAGE_DB_PORT'] ?? '3306',
+      dbSchema: Platform.environment['BOOK_MANAGE_DB_SCHEMA'] ?? 'groupware',
+    ).toString();
   }
 
   /// DB 핸들러 초기화

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:barcode_image/barcode_image.dart';
 import 'package:book_server/src/model/book_model.dart';
+import 'package:book_server/src/model/dbinfo_model.dart';
 import 'package:book_server/src/service/data_service.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:image/image.dart';
