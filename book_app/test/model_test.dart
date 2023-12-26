@@ -99,10 +99,42 @@ void main() {
           .setUserInfo(UserInfo(userId: 'wschoi', userNm: '', deptCd: ''));
     }
 
+    test('미대출 도서는 버튼 라벨 = \'도서대출\'', () {
+      final model = BookRentVModel(
+        targetAssetNo: 'allowed_asset_no',
+        targetUserId: null,
+        client: client,
+      );
+
+      expect(model.rentLabel, equals('도서대출'));
+    });
+
+    test('대출 도서는 버튼 라벨 = \'도서반납\'', () {
+      final model = BookRentVModel(
+        targetAssetNo: 'allowed_asset_no',
+        targetUserId: 'wschoi',
+        client: client,
+      );
+
+      expect(model.rentLabel, equals('도서반납'));
+    });
+
+    test('다른 사용자 대출 도서는 대출불가', () {
+      final model = BookRentVModel(
+        targetAssetNo: 'allowed_asset_no',
+        targetUserId: 'anothor_user',
+        client: client,
+      );
+
+      expect(model.isAllowRent, equals(false));
+    });
+
     test('도서 대출 가능', () async {
-      final model =
-          BookRentVModel(targetAssetNo: 'allowed_asset_no', client: client);
-      model.reqCode = BookRentVModelReqCode.reqCodeRent;
+      final model = BookRentVModel(
+        targetAssetNo: 'allowed_asset_no',
+        targetUserId: null,
+        client: client,
+      );
 
       model.onPressedRent();
       expect(model.status, equals(VModelStatus.push));
@@ -114,9 +146,11 @@ void main() {
     });
 
     test('도서 대출 불가 (관리번호가 다름)', () async {
-      final model =
-          BookRentVModel(targetAssetNo: 'allowed_asset_no', client: client);
-      model.reqCode = BookRentVModelReqCode.reqCodeRent;
+      final model = BookRentVModel(
+        targetAssetNo: 'allowed_asset_no',
+        targetUserId: 'wschoi',
+        client: client,
+      );
 
       model.onPressedRent();
       expect(model.status, equals(VModelStatus.push));
@@ -128,10 +162,11 @@ void main() {
     });
 
     test('도서 반납 가능', () async {
-      final model =
-          BookRentVModel(targetAssetNo: 'rented_asset_no', client: client);
-      model.reqCode = BookRentVModelReqCode.reqCodeReturn;
-      model.targetUserId = 'wschoi';
+      final model = BookRentVModel(
+        targetAssetNo: 'rented_asset_no',
+        targetUserId: 'wschoi',
+        client: client,
+      );
 
       model.onPressedRent();
       expect(model.status, equals(VModelStatus.push));
@@ -143,10 +178,11 @@ void main() {
     });
 
     test('도서 반납 불가 (관리번호가 다름)', () async {
-      final model =
-          BookRentVModel(targetAssetNo: 'rented_asset_no', client: client);
-      model.reqCode = BookRentVModelReqCode.reqCodeReturn;
-      model.targetUserId = 'wschoi';
+      final model = BookRentVModel(
+        targetAssetNo: 'rented_asset_no',
+        targetUserId: 'wschoi',
+        client: client,
+      );
 
       model.onPressedRent();
       expect(model.status, equals(VModelStatus.push));
@@ -158,10 +194,11 @@ void main() {
     });
 
     test('도서 반납 불가 (대출 사용자가 다름)', () async {
-      final model =
-          BookRentVModel(targetAssetNo: 'rented_asset_no', client: client);
-      model.reqCode = BookRentVModelReqCode.reqCodeReturn;
-      model.targetUserId = 'anothor_user';
+      final model = BookRentVModel(
+        targetAssetNo: 'rented_asset_no',
+        targetUserId: 'anothor_user',
+        client: client,
+      );
 
       model.onPressedRent();
       expect(model.status, equals(VModelStatus.push));

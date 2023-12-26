@@ -64,7 +64,10 @@ class BookListVModel extends BaseVModel {
       MaterialPageRoute(
         builder: (context) => BookDetailWidget(
           book: data[0],
-          viewModel: BookRentVModel(targetAssetNo: data[0].assetNo),
+          viewModel: BookRentVModel(
+            targetAssetNo: data[0].assetNo,
+            targetUserId: data[0].rentUser,
+          ),
         ),
       ),
     );

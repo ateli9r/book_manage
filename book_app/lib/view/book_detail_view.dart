@@ -17,26 +17,10 @@ class BookDetailWidget extends StatefulWidget {
 }
 
 class _BookDetailWidgetState extends State<BookDetailWidget> {
-  // String _reqCode = '';
-
-  // String rentButtonLabel {
-  // }
-
-  // bool get isAllowRent => (!(widget.book.rentUser != null &&
-  //     widget.book.rentUser!.isEmpty == false));
-
-  // bool get isAllowReturn => (widget.book.rentYn == 'Y');
-
-  // String get rentLabel => !isAllowReturn ? '도서대출' : '도서반납';
-
-  // void updateRentBook(String scanCode) {
-  //   // setState(() {
-  //   //   scanCode = scanCode;
-  //   // });
-  // }
-
   @override
   Widget build(BuildContext context) {
+    widget.viewModel.initialize(context, setState);
+
     return Scaffold(
       appBar: AppBar(title: const Text('도서 조회')),
       body: Column(
@@ -47,10 +31,10 @@ class _BookDetailWidgetState extends State<BookDetailWidget> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Container(
-                  width: 200,
-                  height: 270,
+                  width: 130,
+                  height: 200,
                   decoration: BoxDecoration(
-                    color: Colors.white70,
+                    color: Colors.blueGrey,
                     border: Border.all(
                       color: const Color(0xFF000000),
                     ),
@@ -78,7 +62,7 @@ class _BookDetailWidgetState extends State<BookDetailWidget> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        child: widget.viewModel.isAllowRent
+        child: widget.viewModel.isAllowRent || widget.viewModel.isAllowReturn
             ? ElevatedButton.icon(
                 icon: const Icon(Icons.qr_code),
                 onPressed: widget.viewModel.onPressedRent,

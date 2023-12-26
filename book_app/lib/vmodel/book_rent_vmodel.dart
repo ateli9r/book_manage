@@ -1,57 +1,66 @@
 import 'package:book_app/service/data_service.dart';
 import 'package:book_app/service/status_service.dart';
 import 'package:book_app/vmodel/base_vmodel.dart';
+import 'package:book_app/vmodel/common_vmodel.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'scan_view.dart';
 import '../view/scan_view.dart';
 
 enum BookRentVModelReqCode {
-  reqCodeRent('rent'),
-  reqCodeReturn('return');
+  /// 대출
+  reqCodeRent('rent', '도서대출'),
 
-  const BookRentVModelReqCode(this.reqCode);
+  /// 반납
+  reqCodeReturn('return', '도서반납');
+
+  const BookRentVModelReqCode(this.reqCode, this.title);
   final String reqCode;
+  final String title;
 }
 
 class BookRentVModel extends BaseVModel {
   /// 생성자
   BookRentVModel({
     required this.targetAssetNo,
+    required this.targetUserId,
     super.client,
   });
-
-  ///
-  BookRentVModelReqCode? reqCode;
 
   /// 대상 도서번호
   String targetAssetNo;
 
-  ///
+  /// 도서 대출자 ID
   String? targetUserId;
 
-  /*
-    String _reqCode = '';
-
-    bool get isAllowRent => (!(widget.book.rentUser != null &&
-        widget.book.rentUser!.isEmpty == false));
-
-    bool get isAllowReturn => (widget.book.rentYn == 'Y');
-
-    String get rentLabel => !isAllowReturn ? '도서대출' : '도서반납';
-  */
-
-  ///
+  /// 대출/반납 api 요청 결과
   bool? isSuccess;
 
-  ///
-  bool isAllowRent = false;
+  /// 대출 가능 여부
+  /// : 도서 대출자 ID == null
+  bool get isAllowRent {
+    if (targetUserId != null && targetUserId!.isNotEmpty) return false;
+    return true;
+  }
 
-  ///
-  bool isAllowReturn = false;
+  /// 반납 가능 여부
+  /// : 도서 대출자 ID == 로그인 사용자 ID
+  bool get isAllowReturn =>
+      (targetUserId ?? '') == (StatusService.shared.getUserInfo?.userId ?? '');
 
   /// 버튼 라벨
-  String rentLabel = '도서대출';
+  /// : 대출 가능 여부(Y) = 도서대출, 반납 가능 여부(Y) = 도서반납, 기타 = ''
+  String get rentLabel {
+    if (isAllowRent) return '도서대출';
+    if (isAllowReturn) return '도서반납';
+    return '';
+  }
+
+  /// 요청 코드
+  /// : 대출 가능 여부(Y) = rent, 반납 가능 여부(Y) = return, 기타 = null
+  BookRentVModelReqCode? get reqCode {
+    if (isAllowRent) return BookRentVModelReqCode.reqCodeRent;
+    if (isAllowReturn) return BookRentVModelReqCode.reqCodeReturn;
+    return null;
+  }
 
   /// 대출/반납 버튼 클릭
   void onPressedRent() {
@@ -84,6 +93,7 @@ class BookRentVModel extends BaseVModel {
     }
 
     if (isAccept) {
+      // api 요청
       final service = DataService(client: client);
       final resp = await service.rent(
         reqCode: reqCode,
@@ -99,5 +109,14 @@ class BookRentVModel extends BaseVModel {
     }
 
     status = VModelStatus.idle;
+
+    if (context != null && (isSuccess ?? false)) {
+      final title = this.reqCode?.title ?? '';
+      final message = '$title 되었습니다.';
+
+      await CommonVModel.shared.showMessage(context, title, message);
+
+      Navigator.of(context!).pop();
+    }
   }
 }
