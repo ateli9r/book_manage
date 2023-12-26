@@ -11,24 +11,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  UserInfo? userInfo;
-
-  void setUserInfo(UserInfo value) {
-    setState(() {
-      userInfo = value;
-    });
-  }
-
   Widget routeHomeWidget() {
-    if (userInfo == null) {
+    if (StatusService.shared.getUserInfo == null) {
       return LoginPageWidget(viewModel: LoginVModel());
     }
-    return HomePageWidget();
+    return const HomePageWidget();
   }
 
   @override
   Widget build(BuildContext context) {
-    StatusService.shared.setUserInfo = setUserInfo;
+    StatusService.shared.setStateApp = setState;
 
     return MaterialApp(
       theme: ThemeData(

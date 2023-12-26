@@ -13,6 +13,7 @@ class DataService {
     Map<String, Object> ret = {};
     ret["isSuccess"] = false;
 
+    if (userId.isEmpty || password.isEmpty) return ret;
     client ??= http.Client();
 
     final response = await client!.post(
@@ -42,7 +43,7 @@ class DataService {
 
       final resp = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
 
-      if (resp['isSuccess'] as bool == true) {
+      if (resp.containsKey('isSuccess') && resp['isSuccess'] as bool == true) {
         final mapList = resp['data'] as List;
         ret.addAll(mapList.map((map) {
           return BookModel(
@@ -60,5 +61,35 @@ class DataService {
     });
 
     return data;
+  }
+
+  Future<Map<String, dynamic>> rent({
+    required String reqCode,
+    required String userId,
+    required String assetNo,
+  }) async {
+    Map<String, dynamic> ret = {};
+
+    if (reqCode.isEmpty || userId.isEmpty || assetNo.isEmpty) return ret;
+
+    client ??= http.Client();
+
+    final response = await client!.post(
+      Uri.parse('$apiHost/rent'),
+      headers: headers,
+      body: jsonEncode({
+        'userId': userId,
+        'assetNo': assetNo,
+        'reqCode': reqCode,
+      }),
+    );
+
+    final resp = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+
+    if (resp.containsKey('isSuccess')) {
+      ret['isSuccess'] = resp['isSuccess'];
+    }
+
+    return ret;
   }
 }

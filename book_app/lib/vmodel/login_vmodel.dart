@@ -50,13 +50,9 @@ class LoginVModel extends BaseVModel {
       return;
     }
 
-    if (StatusService.shared.setUserInfo != null) {
-      StatusService.shared.setUserInfo!(UserInfo(
-        userId: userId,
-        userNm: '#UserNm',
-        deptCd: '#deptCd',
-      ));
-    }
+    // 로그인 처리
+    StatusService.shared
+        .setUserInfo(UserInfo(userId: userId, userNm: '', deptCd: ''));
 
     status = VModelStatus.finish;
   }

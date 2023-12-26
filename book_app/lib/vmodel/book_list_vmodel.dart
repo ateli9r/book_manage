@@ -1,3 +1,4 @@
+import 'package:book_app/service/status_service.dart';
 import 'package:flutter/material.dart';
 import 'package:book_app/vmodel/base_vmodel.dart';
 import '../service/data_service.dart';
@@ -63,7 +64,7 @@ class BookListVModel extends BaseVModel {
       MaterialPageRoute(
         builder: (context) => BookDetailWidget(
           book: data[0],
-          viewModel: BookRentVModel(),
+          viewModel: BookRentVModel(targetAssetNo: data[0].assetNo),
         ),
       ),
     );

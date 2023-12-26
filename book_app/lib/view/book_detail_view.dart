@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'scan_view.dart';
 import '../model/book_model.dart';
 import '../vmodel/book_rent_vmodel.dart';
 
@@ -18,23 +17,23 @@ class BookDetailWidget extends StatefulWidget {
 }
 
 class _BookDetailWidgetState extends State<BookDetailWidget> {
-  // String _scanCode = '';
-  String _reqCode = '';
+  // String _reqCode = '';
 
   // String rentButtonLabel {
   // }
-  bool get isAllowRent => (!(widget.book.rentUser != null &&
-      widget.book.rentUser!.isEmpty == false));
 
-  bool get isAllowReturn => (widget.book.rentYn == 'Y');
+  // bool get isAllowRent => (!(widget.book.rentUser != null &&
+  //     widget.book.rentUser!.isEmpty == false));
 
-  String get rentLabel => !isAllowReturn ? '도서대출' : '도서반납';
+  // bool get isAllowReturn => (widget.book.rentYn == 'Y');
 
-  void updateRentBook(String scanCode) {
-    // setState(() {
-    //   scanCode = scanCode;
-    // });
-  }
+  // String get rentLabel => !isAllowReturn ? '도서대출' : '도서반납';
+
+  // void updateRentBook(String scanCode) {
+  //   // setState(() {
+  //   //   scanCode = scanCode;
+  //   // });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -72,33 +71,23 @@ class _BookDetailWidgetState extends State<BookDetailWidget> {
               fontSize: 14,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Text('#내용'),
-          ),
+          // Padding(
+          //   padding: EdgeInsets.all(20.0),
+          //   child: Text('#내용'),
+          // ),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        child: isAllowRent
+        child: widget.viewModel.isAllowRent
             ? ElevatedButton.icon(
                 icon: const Icon(Icons.qr_code),
-                onPressed: () {
-                  print('tapped');
-
-                  _reqCode = (!isAllowReturn) ? 'rent' : 'return';
-
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ScanPageWidget(setScanCode: updateRentBook)),
-                  );
-                },
-                label: Text(rentLabel),
+                onPressed: widget.viewModel.onPressedRent,
+                label: Text(widget.viewModel.rentLabel),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     '대출불가',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -110,12 +99,6 @@ class _BookDetailWidgetState extends State<BookDetailWidget> {
                   Text(widget.book.rentYn ?? '#'),
                 ],
               ),
-
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //   children: [
-        //   ],
-        // ),
       ),
     );
   }

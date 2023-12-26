@@ -1,5 +1,7 @@
 @TestOn('vm')
 
+import 'package:book_app/model/user_model.dart';
+import 'package:book_app/service/status_service.dart';
 import 'package:book_app/vmodel/base_vmodel.dart';
 import 'package:test/test.dart';
 import 'package:http/http.dart' as http;
@@ -92,16 +94,82 @@ void main() {
   group('도서 대출 모델 테스트', () {
     http.Client client = BookRentMockClient();
 
-    test('도서 대출', () async {
-      final model = BookRentVModel(client: client);
+    if (StatusService.shared.getUserInfo == null) {
+      StatusService.shared
+          .setUserInfo(UserInfo(userId: 'wschoi', userNm: '', deptCd: ''));
+    }
 
-      throw Exception('no impl');
+    test('도서 대출 가능', () async {
+      final model =
+          BookRentVModel(targetAssetNo: 'allowed_asset_no', client: client);
+      model.reqCode = BookRentVModelReqCode.reqCodeRent;
+
+      model.onPressedRent();
+      expect(model.status, equals(VModelStatus.push));
+
+      await model.requestRent('allowed_asset_no');
+
+      expect(model.status, equals(VModelStatus.idle));
+      expect(model.isSuccess, equals(true));
     });
 
-    test('도서 반납', () async {
-      final model = BookRentVModel(client: client);
+    test('도서 대출 불가 (관리번호가 다름)', () async {
+      final model =
+          BookRentVModel(targetAssetNo: 'allowed_asset_no', client: client);
+      model.reqCode = BookRentVModelReqCode.reqCodeRent;
 
-      throw Exception('no impl');
+      model.onPressedRent();
+      expect(model.status, equals(VModelStatus.push));
+
+      await model.requestRent('not_allowed_asset_no');
+
+      expect(model.status, equals(VModelStatus.idle));
+      expect(model.isSuccess, equals(false));
+    });
+
+    test('도서 반납 가능', () async {
+      final model =
+          BookRentVModel(targetAssetNo: 'rented_asset_no', client: client);
+      model.reqCode = BookRentVModelReqCode.reqCodeReturn;
+      model.targetUserId = 'wschoi';
+
+      model.onPressedRent();
+      expect(model.status, equals(VModelStatus.push));
+
+      await model.requestRent('rented_asset_no');
+
+      expect(model.status, equals(VModelStatus.idle));
+      expect(model.isSuccess, equals(true));
+    });
+
+    test('도서 반납 불가 (관리번호가 다름)', () async {
+      final model =
+          BookRentVModel(targetAssetNo: 'rented_asset_no', client: client);
+      model.reqCode = BookRentVModelReqCode.reqCodeReturn;
+      model.targetUserId = 'wschoi';
+
+      model.onPressedRent();
+      expect(model.status, equals(VModelStatus.push));
+
+      await model.requestRent('not_rented_asset_no');
+
+      expect(model.status, equals(VModelStatus.idle));
+      expect(model.isSuccess, equals(false));
+    });
+
+    test('도서 반납 불가 (대출 사용자가 다름)', () async {
+      final model =
+          BookRentVModel(targetAssetNo: 'rented_asset_no', client: client);
+      model.reqCode = BookRentVModelReqCode.reqCodeReturn;
+      model.targetUserId = 'anothor_user';
+
+      model.onPressedRent();
+      expect(model.status, equals(VModelStatus.push));
+
+      await model.requestRent('not_rented_asset_no');
+
+      expect(model.status, equals(VModelStatus.idle));
+      expect(model.isSuccess, equals(false));
     });
   });
 }

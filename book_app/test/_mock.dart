@@ -134,7 +134,7 @@ class BookRentMockClient extends Mock implements http.Client {
       }
     } else if (reqCode == "return") {
       // 반납
-      if (userId == "rent_user" && assetNo == "rented_asset_no") {
+      if (userId == "wschoi" && assetNo == "rented_asset_no") {
         // 반납 가능 조건 (도서를 대출한 아이디)
         respBody = {"isSuccess": true};
       } else {
