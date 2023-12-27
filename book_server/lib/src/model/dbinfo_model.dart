@@ -13,7 +13,7 @@ class DBInfoModel {
     required this.dbOptions,
   });
 
-  ///
+  /// 환경변수 파싱
   factory DBInfoModel.readEnv(String envKey) {
     final dbUrl = Platform.environment[envKey] ?? '';
 
@@ -25,7 +25,7 @@ class DBInfoModel {
     final buffer12 = buffer10[1].split(':');
     final buffer20 = buffer0[3].split('?');
 
-    final dbDriver = buffer0[0];
+    final dbDriver = buffer0[0].replaceAll(':', '');
     final dbUser = buffer11[0];
     final dbPassword = Uri.decodeQueryComponent(buffer11[1]);
     final dbHost = buffer12[0];

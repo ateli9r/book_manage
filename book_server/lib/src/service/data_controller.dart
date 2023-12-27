@@ -25,7 +25,7 @@ class DataController {
   /// 시스템 환경변수로 DB 접속정보 초기화
   String readConnString() {
     try {
-      return DBInfoModel.readEnv('DB_URL-BOOK_MANAGE').toString();
+      return DBInfoModel.readEnv('DB_URL_BOOK_MANAGE').toString();
     } catch (_) {
       return DBInfoModel.testDB().toString();
     }

@@ -26,7 +26,28 @@ FROM scratch
 COPY --from=build /runtime/ /
 COPY --from=build /app/build/bin/server /app/bin/
 # Uncomment the following line if you are serving static files.
-# COPY --from=build /app/build/public /public/
+COPY --from=build /app/build/public /public/
+
+# RUN mkdir -p /app/public/print
+# RUN mkdir -p /app/build/public/print
+# RUN mkdir -p /app/build/public/print
+
+# EXPOSE 8080
+
+# FROM node:18-alpine
+
+# Create app directory
+# WORKDIR /usr/src/app
+
+# COPY package*.json ./
+
+# RUN npm install
+# COPY . . 
+# EXPOSE 5000
+
+# RUN npx prisma generate
+# CMD [ "npm", "run", "dev" ]
+
 
 # Start the server.
 CMD ["/app/bin/server"]
