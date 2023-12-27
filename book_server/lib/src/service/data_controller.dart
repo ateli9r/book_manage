@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:book_server/src/generated/prisma/prisma_client.dart';
 import 'package:book_server/src/model/book_model.dart';
 import 'package:book_server/src/model/dbinfo_model.dart';
@@ -26,13 +24,11 @@ class DataController {
 
   /// 시스템 환경변수로 DB 접속정보 초기화
   String readConnString() {
-    return DBInfoModel(
-      dbUser: Platform.environment['BOOK_MANAGE_DB_USER'] ?? 'test',
-      dbPassword: Platform.environment['BOOK_MANAGE_DB_PASS'] ?? 'test1234',
-      dbHost: Platform.environment['BOOK_MANAGE_DB_HOST'] ?? '192.168.0.151',
-      dbPort: Platform.environment['BOOK_MANAGE_DB_PORT'] ?? '3306',
-      dbSchema: Platform.environment['BOOK_MANAGE_DB_SCHEMA'] ?? 'groupware',
-    ).toString();
+    try {
+      return DBInfoModel.readEnv('DB_URL-BOOK_MANAGE').toString();
+    } catch (_) {
+      return DBInfoModel.testDB().toString();
+    }
   }
 
   /// DB 핸들러 초기화
