@@ -26,7 +26,7 @@ class DataController {
   String readConnString() {
     var connStr = '';
     try {
-      connStr = DBInfoModel.readEnv('DB_URL_BOOK_MANAGE').toString();
+      connStr = DBInfoModel.readEnv('DB_URL').toString();
     } catch (_) {
       connStr = DBInfoModel.testDB().toString();
     }
